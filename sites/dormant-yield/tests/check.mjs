@@ -137,6 +137,24 @@ for (const f of html) {
 const sitemap = readFileSync(join(pub, "sitemap.xml"), "utf8");
 for (const m of sitemap.matchAll(/<loc>https:\/\/dormantyield\.com([^<]*)<\/loc>/g)) if (!resolveLocal(m[1] || "/")) fail("public/sitemap.xml", `sitemap URL has no page: ${m[1]}`);
 
+// Site health: one h1, alt on every image, unique titles, description present (length is a warning).
+const warns = [];
+const titles = new Map();
+for (const f of html) {
+  const rel = relative(root, f);
+  const src = readFileSync(f, "utf8");
+  const h1 = (src.match(/<h1[\s>]/g) || []).length;
+  if (h1 !== 1) fail(rel, `expected one <h1>, found ${h1}`);
+  for (const m of src.matchAll(/<img\b[^>]*>/g)) if (!/\salt="/.test(m[0])) fail(rel, `img without alt: ${m[0].slice(0, 60)}`);
+  const t = (src.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
+  if (titles.has(t)) fail(rel, `duplicate <title> with ${titles.get(t)}`); else titles.set(t, rel);
+  const d = (src.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+  if (!d) fail(rel, "missing meta description");
+  else if (d.length > 175 || d.length < 50) warns.push(`${rel}: description ${d.length} chars`);
+  if (t.length > 75) warns.push(`${rel}: title ${t.length} chars`);
+}
+if (warns.length) console.warn(`health warnings (${warns.length}), first 5:\n  ` + warns.join("\n  "));
+
 if (pending) {
   const msg = `${pending} partner fact(s) still data-verify-status="pending". Fred must click-check each on micro1's site, then set "verified".`;
   if (LAUNCH) fail("public/index.html", msg);

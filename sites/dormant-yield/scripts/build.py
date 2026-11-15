@@ -10,6 +10,8 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
 sys.path.insert(0, str(ROOT / "data"))
 import industries as db  # noqa: E402
+sys.path.insert(0, str(ROOT / "scripts"))
+import v4  # noqa: E402
 
 SITE = "https://dormantyield.com"
 # Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Byte-exact. Never edit.
@@ -72,9 +74,10 @@ EXT = ' <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab
 
 LISTED = {  # 20 industries shown alongside the 10 key niches (30 listed); all 50 are in the expanded view and search
     "accounting-firms", "legal-practices", "management-consulting", "it-services-msp", "cybersecurity", "telecoms",
-    "games-studios", "media-publishing", "real-estate-proptech", "insurance-brokers", "wealth-management", "lending",
+    "media-publishing", "real-estate-proptech", "insurance-brokers", "wealth-management", "lending",
     "manufacturing", "automotive-ev", "food-beverage", "restaurants-hospitality", "hotels-travel", "hydrogen-fuel-cells",
-    "facilities-management", "marketplaces-platforms"}
+    "life-sciences-services", "energy-utilities", "marketplaces-platforms"}
+assert len(LISTED) == 20
 
 
 def industries():
@@ -126,12 +129,14 @@ def header():
     li = lambda i: f'<li><a href="/industries/{i["slug"]}">{e(i["name"])}</a></li>'
     key_html = "".join(f'<li><a href="/industries/{i["slug"]}"><strong>{e(i["name"])}</strong><span>{e(i["group"])}</span></a></li>' for i in key)
     more_html = "".join(f'<div><p class="mega-sub">{e(g)}</p><ul>{"".join(li(i) for i in more if i["group"] == g)}</ul></div>' for g in groups)
-    flag = lambda c: f'<img src="/img/flags/{c}.svg" width="24" height="16" alt="">'
-    big = "".join(f'<li><a href="/countries/{slug}">{flag(c)}<strong>{e(n)}</strong><span>Rights guide</span></a></li>' for c, n, _, slug in BIG4)
-    rest = "".join(f'<li>{flag(c)}{e(n)}</li>' for c, n, b, _ in COUNTRIES if not b)
-    guides = ('<li><a href="/how-it-works"><strong>How it works</strong><span>Four steps, what to prepare</span></a></li>'
+    flag = lambda c: f'<img class="fl" src="/img/flags/{c}.svg" width="24" height="24" alt="">'
+    big = "".join(f'<li><a href="/guides/{slug}">{flag(c)}<strong>{e(n)}</strong><span>SME and enterprise guides</span></a></li>' for c, n, _, slug in BIG4)
+    rest = "".join(f'<li><a href="/guides/{v4.GUIDE_SLUG[c]}">{flag(c)}{e(n)}</a></li>' for c, n, b, _ in COUNTRIES if not b)
+    guides = ('<li><a href="/guides"><strong>Country guides</strong><span>SMEs and enterprises, ten countries</span></a></li>'
+              '<li><a href="/how-it-works"><strong>How it works</strong><span>Four steps, what to prepare</span></a></li>'
+              '<li><a href="/tools/readiness"><strong>Readiness checklist</strong><span>Twenty checks, tick and copy</span></a></li>'
               '<li><a href="/officeholders"><strong>For officeholders</strong><span>Administrators, liquidators, trustees</span></a></li>'
-              '<li><a href="/#fit-check"><strong>Fit check</strong><span>Five questions, one answer</span></a></li>'
+              '<li><a href="/blog"><strong>Insights</strong><span>Bona vacantia, ABCs, 363 sales and more</span></a></li>'
               '<li><a href="/faq"><strong>FAQ</strong><span>Fees, records, employees, timing</span></a></li>'
               '<li><a href="/about"><strong>About us</strong><span>Who we are and how we are paid</span></a></li>')
     search = lambda sid: (f'<div class="mega-search"><label for="q-{sid}">Search 50 industries and all pages</label>'
@@ -143,12 +148,13 @@ def header():
     ind_panel = search("ind") + ind_inner
     cty_panel = (f'<div class="mega-cols"><div><p class="mega-h">The big four · main focus</p><ul class="mega-list">{big}</ul></div>'
                  f'<div><p class="mega-h">Also on micro1\'s list</p><ul class="mega-flags">{rest}</ul>'
-                 f'<p class="small muted">Rules differ in these six countries. Take local advice.</p></div></div>'
-                 f'<a class="mega-all" href="/countries">All ten countries →</a>')
+                 f'<p class="small muted">Short guides. Rules differ; take local advice.</p></div></div>'
+                 f'<a class="mega-all" href="/guides">All country guides →</a>')
     gd_panel = f'<ul class="mega-list one">{guides}</ul>'
     return f'''<a class="skip" href="#top">Skip to content</a>
+<div class="masthead">
 <div class="disclose" role="note">
-  <div class="wrap">Independent referrer, not affiliated with micro1. If a company applies to micro1 through our link and a qualifying deal completes, micro1 may pay us a referral fee. You pay nothing. <a href="/about">How we are paid</a></div>
+  <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">We may earn a referral fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
 </div>
 <header class="top">
   <div class="wrap">
@@ -175,7 +181,8 @@ def header():
       </details>
     </div>
   </div>
-</header>'''
+</header>
+</div>'''
 
 
 FOOTER_T = '''<footer>
@@ -184,7 +191,7 @@ FOOTER_T = '''<footer>
     <address class="owner">Kaada Nordic MarTech · Org. no. 936 289 835 (Norway) · <a href="mailto:contact@nordicmartech.com">contact@nordicmartech.com</a></address>
     <p>An independent referrer, not affiliated with, endorsed by or acting for micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. Companies pay us nothing.</p>
     <p>General information, not legal, tax or insolvency advice. Partner criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed REVIEWED_DATE.</p>
-    <nav class="row foot-nav" aria-label="Footer"><a href="/how-it-works">How it works</a><a href="/officeholders">For officeholders</a><a href="/industries">Industries</a><a href="/countries">Countries</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
+    <nav class="row foot-nav" aria-label="Footer"><a href="/guides">Country guides</a><a href="/blog">Insights</a><a href="/tools/readiness">Readiness checklist</a><a href="/how-it-works">How it works</a><a href="/officeholders">For officeholders</a><a href="/industries">Industries</a><a href="/countries">Countries</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
   </div>
 </footer>
 <script src="{JS}" data-index="{IDX}" defer></script>'''
@@ -287,7 +294,7 @@ def fill(body):
         f'<label><input type="radio" name="country" id="c-{c}" value="{c}"{" checked" if c == "gb" else ""}><span><img src="/img/flags/{c}.svg" width="18" height="12" alt=""> {e(n)}</span></label>'
         for c, n, _, _ in COUNTRIES) + '<label><input type="radio" name="country" id="c-other" value="other"><span>Elsewhere</span></label>'
     faq_short = "".join(f'<details><summary>{e(q)}</summary><p>{a}</p></details>' for q, a in faq_html()[:6])
-    body = (body.replace("{{FLAGS}}", big + rest).replace("{{RIGHTS4}}", rights4).replace("{{NICHES}}", niches)
+    body = (body.replace("{{PILLS}}", v4.flag_pills()).replace("{{FLAGS}}", big + rest).replace("{{RIGHTS4}}", rights4).replace("{{NICHES}}", niches)
             .replace("{{COUNTRY_OPTS}}", opts_c).replace("{{FAQ}}", faq_short).replace("{{APPLY}}", apply_link())
             .replace("{{CHIP_GS}}", chip("company.micro1.ai/get-started", "15 Nov 2026"))
             .replace("{{CHIP_DATA}}", chip("micro1.ai/data", "10 Nov 2026")))
@@ -306,7 +313,7 @@ def home():
         {"@type": "WebSite", "@id": SITE + "/#site", "url": SITE + "/", "name": "Dormant Yield", "inLanguage": "en-GB", "publisher": {"@id": SITE + "/#org"}},
     ]}
     page("", "Dormant Yield",
-         "For administrators, liquidators and trustees of closed and closing companies in the UK, US, Canada and Australia: how licensing business records to AI developers works, what to check first and where to apply.",
+         "For officeholders of closed and closing companies in the UK, US, Canada and Australia: how licensing business records works and where to apply.",
          fill((ROOT / "content/home.html").read_text()), ld)
 
 
@@ -359,7 +366,7 @@ def country_pages():
         ld = {"@context": "https://schema.org", "@graph": [ORG,
               {"@type": "WebPage", "name": f"{n}: who can license a closed company's records", "url": f"{SITE}/countries/{slug}", "inLanguage": "en-GB", "dateModified": LASTMOD},
               crumbs(("Home", "/"), ("Countries", "/countries"), (n, f"/countries/{slug}"))]}
-        page(f"countries/{slug}", f"{n}: closed company records and who can license them | Dormant Yield",
+        page(f"countries/{slug}", f"{n}: who can license closed company records | Dormant Yield",
              f"{n}: who controls a closed or closing company's records, what happens after dissolution, personal data rules, and micro1's published criteria.", body, ld)
 
     cards = "".join(
@@ -386,6 +393,14 @@ def industry_pages():
         related = [r for r in INDS if r["group"] == i["group"] and r["slug"] != i["slug"]][:4]
         rel = "".join(f'<li><a href="/industries/{r["slug"]}">{e(r["name"])}</a></li>' for r in related)
         why = (f'<div class="callout"><span class="pill">Key niche</span><p>{e(i["why"])}</p></div>' if i["key"] else "")
+        extra = ""
+        if i["slug"] in db.SYSTEMS:
+            sysl = "".join(f"<li>{e(x)}</li>" for x in db.SYSTEMS[i["slug"]])
+            extra = (f'<section class="pt0"><div class="wrap ind-deep">'
+                     f'<div class="card-soft"><img src="/img/icon-1.webp" width="56" height="59" alt=""><h2 class="h3">Systems to look for</h2><ul>{sysl}</ul><p class="small muted">Export while admin access still works.</p></div>'
+                     f'<div class="card-soft"><img src="/img/icon-2.webp" width="56" height="59" alt=""><h2 class="h3">SMEs (30 to 249 staff)</h2><ul><li>{e(v4.SIZES["sme"]["tips"][0])}</li><li>{e(v4.SIZES["sme"]["tips"][1])}</li></ul></div>'
+                     f'<div class="card-soft"><img src="/img/icon-4.webp" width="56" height="59" alt=""><h2 class="h3">Enterprises (250+ staff)</h2><ul><li>{e(v4.SIZES["enterprise"]["tips"][0])}</li><li>{e(v4.SIZES["enterprise"]["tips"][1])}</li></ul></div>'
+                     f'</div></section>')
         body = f'''<section class="ind-hero"><div class="wrap stack">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/industries">Industries</a> / <span>{e(i["name"])}</span></nav>
 <span class="eyebrow">{e(i["group"])}</span>
@@ -397,6 +412,7 @@ def industry_pages():
 <div><h2 class="h3">What usually exists</h2><ul>{"".join(f"<li>{e(x)}</li>" for x in i["records"])}</ul></div>
 <div><h2 class="h3">What needs care</h2><ul>{"".join(f"<li>{e(x)}</li>" for x in i["care"])}</ul><p class="small muted">Employee and HR records always need the most care, whatever the industry.</p></div>
 </div></section>
+{extra}
 <section class="pt0"><div class="wrap stack">
 <h2>micro1's published criteria</h2>
 <dl class="facts">
@@ -408,15 +424,16 @@ def industry_pages():
 <div class="row mt12"><a class="btn btn-primary" href="/#fit-check">Check your fit</a>{apply_link()}</div>
 <p class="small muted">Referral link. As an independent referrer we may receive a fee from micro1 if a qualifying deal completes. You pay nothing. micro1 decides what qualifies.</p>
 </div></section>
-<section class="pt0"><div class="wrap stack"><h2 class="h3">Related industries</h2><ul class="tags">{rel}<li><a href="/industries">All 50 industries</a></li></ul></div></section>'''
+<section class="pt0"><div class="wrap stack"><h2 class="h3">Related industries</h2><ul class="tags">{rel}<li><a href="/industries">All 50 industries</a></li></ul></div></section>
+{v4.next_cards("ready", "guides", "blog")}'''
         ld = {"@context": "https://schema.org", "@graph": [ORG,
               {"@type": "WebPage", "name": f'{i["name"]}: records from closed and closing companies', "url": f'{SITE}/industries/{i["slug"]}', "inLanguage": "en-GB", "isPartOf": {"@id": SITE + "/#site"}, "dateModified": LASTMOD},
               crumbs(("Home", "/"), ("Industries", "/industries"), (i["name"], f'/industries/{i["slug"]}'))]}
         page(f'industries/{i["slug"]}', f'{i["name"]}: closed company records | Dormant Yield',
-             f'{i["name"]} companies in administration, liquidation or bankruptcy: which operational records may be licensable to AI developers, what needs care, and micro1\'s published criteria.',
+             f'{i["name"]}: which records from closed and closing companies may be licensable, what needs care, and micro1\'s criteria.',
              body, ld, og_image="/img/og.jpg")
 
-    groups = sorted({i["group"] for i in INDS})
+    groups = sorted({i["group"] for i in INDS}, key=lambda g: (-sum(1 for i in INDS if i["group"] == g and i["key"]), g))
     def card(i):
         return (f'<li data-name="{e(i["name"].lower())} {e(i["group"].lower())}"><a href="/industries/{i["slug"]}">'
                 f'<span class="g">{e(i["group"])}</span><strong>{e(i["name"])}</strong>'
@@ -465,10 +482,22 @@ def index_and_sitemap():
            {"t": "FAQ", "u": "/faq", "k": "questions fee employee data struck off director timing canada australia"},
            {"t": "How it works", "u": "/how-it-works", "k": "steps process timeline prepare sample review contract de-identify"},
            {"t": "For officeholders", "u": "/officeholders", "k": "administrator liquidator trustee receiver insolvency practitioner assignee creditors"},
+           {"t": "Country guides", "u": "/guides", "k": "guide sme enterprise steps " + " ".join(n.lower() for _, n, _, _ in COUNTRIES)},
+           {"t": "Readiness checklist", "u": "/tools/readiness", "k": "checklist readiness prepare tool authority records people contracts"},
+           {"t": "Insights", "u": "/blog", "k": "blog articles insights bona vacantia abc 363 chapter 7 restoration"},
            {"t": "About us", "u": "/about", "k": "about independent referrer fee contact kaada nordic martech"},
            {"t": "Privacy", "u": "/privacy", "k": "privacy gdpr cookies data protection"},
            {"t": "Legal and disclosures", "u": "/legal", "k": "legal disclosure referral fee affiliation"},
            {"t": "All industries", "u": "/industries", "k": "industries sectors list"}]
+    for c, n, big, slug in COUNTRIES:
+        if big:
+            idx.append({"t": f"{n}: SME guide", "u": f"/guides/{slug}/sme", "g": "Guide · main focus", "k": f"{n.lower()} sme small medium guide steps"})
+            idx.append({"t": f"{n}: enterprise guide", "u": f"/guides/{slug}/enterprise", "g": "Guide · main focus", "k": f"{n.lower()} enterprise large guide steps"})
+        else:
+            idx.append({"t": f"{n}: guide", "u": f"/guides/{v4.GUIDE_SLUG[c]}", "g": "Guide", "k": n.lower() + " " + " ".join(v4.LOCAL[c].values()).lower()})
+    for f in sorted((ROOT / "content/blog").glob("*.html")):
+        m = dict(l.split(": ", 1) for l in f.read_text().split("\n---\n", 1)[0].strip().splitlines())
+        idx.append({"t": m["h1"], "u": f"/blog/{f.stem}", "g": "Insight", "k": m["description"].lower()})
     for c, n, _, slug in BIG4:
         idx.append({"t": f"{n}: rights guide", "u": f"/countries/{slug}", "g": "Country · main focus",
                     "k": " ".join([n.lower(), RIGHTS[c]["roles"].lower()] + [x.lower() for x in RIGHTS[c]["control"]])})
@@ -476,15 +505,20 @@ def index_and_sitemap():
         idx.append({"t": i["name"], "u": f'/industries/{i["slug"]}', "g": i["group"] + (" · Key niche" if i["key"] else ""),
                     "k": " ".join([i["group"]] + i["records"]).lower()})
     (PUB / "assets/index.json").write_text(json.dumps(idx, ensure_ascii=False, separators=(",", ":")))
-    urls = (["/", "/how-it-works", "/officeholders", "/industries", "/countries", "/faq", "/about", "/privacy", "/legal"]
+    urls = (["/", "/how-it-works", "/officeholders", "/industries", "/countries", "/faq", "/about", "/privacy", "/legal", "/tools/readiness", "/blog"]
+            + v4.guide_urls() + [f"/blog/{f.stem}" for f in sorted((ROOT / "content/blog").glob("*.html"))]
             + [f"/countries/{slug}" for _, _, _, slug in BIG4] + [f'/industries/{i["slug"]}' for i in INDS])
     sm = "".join(f'  <url><loc>{SITE}{"" if u == "/" else u}{"/" if u == "/" else ""}</loc><lastmod>{LASTMOD}</lastmod></url>\n' for u in urls)
     (PUB / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{sm}</urlset>\n')
 
 
 if __name__ == "__main__":
+    v4.init(globals())
     index_and_sitemap()
     home()
+    v4.guides()
+    v4.readiness()
+    v4.blog()
     faq_page()
     country_pages()
     industry_pages()

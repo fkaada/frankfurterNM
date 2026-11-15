@@ -34,6 +34,45 @@
   });
   window.addEventListener("resize", function () { megas.forEach(function (d) { if (d.open && d.offsetParent === null) d.open = false; }); });
 
+  // ---------- masthead: compact banner once the page scrolls ----------
+  var mast = document.querySelector(".masthead");
+  if (mast) {
+    var onScroll = function () { mast.classList.toggle("is-compact", window.scrollY > 120); };
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  }
+
+  // ---------- readiness checklist (in-page only: nothing stored or sent) ----------
+  var rc = document.querySelector("[data-checklist]");
+  if (rc) {
+    var boxes = rc.querySelectorAll('input[type="checkbox"]'), cnt = rc.querySelector(".ready-count"),
+      rbar = rc.querySelector(".m-bar span"), rres = rc.querySelector("[data-ready-result]"), copied = rc.querySelector("[data-copied]");
+    var rcUpdate = function () {
+      var done = 0; boxes.forEach(function (b) { if (b.checked) done++; });
+      cnt.textContent = done + " of " + boxes.length + " done";
+      rbar.style.transform = "scaleX(" + (done / boxes.length) + ")";
+      var pct = done / boxes.length, tone, pill, h, p;
+      if (done === 0) { tone = ""; pill = "Not started"; h = "Tick what is already true."; p = "The answer updates as you go."; }
+      else if (pct < 0.5) { tone = "warn"; pill = "Early"; h = "Start with authority and records."; p = "Confirm who can sign and export the records while access still works."; }
+      else if (pct < 0.85) { tone = "warn"; pill = "Getting there"; h = "Close the gaps on people and contracts."; p = "Set employee data aside and check customer and software terms before any sample."; }
+      else { tone = "go"; pill = "Ready"; h = "Worth a conversation."; p = "Run the fit check, then apply through micro1. micro1 decides what qualifies."; }
+      rres.dataset.tone = tone;
+      rres.innerHTML = '<span class="pill">' + esc(pill) + "</span><h3>" + esc(h) + "</h3><p>" + esc(p) + "</p>";
+    };
+    boxes.forEach(function (b) { b.addEventListener("change", rcUpdate); });
+    rc.querySelector("[data-reset]").addEventListener("click", function () { boxes.forEach(function (b) { b.checked = false; }); rcUpdate(); });
+    rc.querySelector("[data-copy]").addEventListener("click", function () {
+      var lines = ["Records readiness checklist (dormantyield.com/tools/readiness)"];
+      rc.querySelectorAll("fieldset").forEach(function (fs) {
+        lines.push("", fs.querySelector("legend").textContent);
+        fs.querySelectorAll("li").forEach(function (li) { lines.push((li.querySelector("input").checked ? "[x] " : "[ ] ") + li.textContent.trim()); });
+      });
+      var text = lines.join("\n");
+      var ok = function () { copied.textContent = "Copied."; }, bad = function () { copied.textContent = "Copy failed. Select the list and copy it manually."; };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, bad); else bad();
+    });
+    rcUpdate();
+  }
+
   // ---------- search over /assets/index.json ----------
   var index = null, loading = null;
   function loadIndex() {
