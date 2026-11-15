@@ -202,7 +202,7 @@ def footer():
             .replace("{JS}", asset("/assets/site.js")).replace("{IDX}", asset("/assets/index.json")))
 
 
-def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None):
+def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None, head_extra=""):
     if visual:
         body = v4.with_visual(body, visual)
     url = SITE + ("/" if path == "" else "/" + path)
@@ -234,7 +234,7 @@ def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{asset('/assets/site.css')}">
-{ld}</head>
+{head_extra}{ld}</head>
 <body>
 {header()}
 <main id="top">
@@ -316,7 +316,8 @@ def home():
     ]}
     page("", "Dormant Yield",
          "For officeholders of closed and closing companies in the UK, US, Canada and Australia: how licensing business records works and where to apply.",
-         fill((ROOT / "content/home.html").read_text()), ld)
+         fill((ROOT / "content/home.html").read_text()), ld,
+         head_extra='<link rel="preload" as="image" href="/img/vault.webp" imagesrcset="/img/vault-400.webp 400w, /img/vault-560.webp 560w, /img/vault-720.webp 720w, /img/vault.webp 900w" imagesizes="(max-width: 860px) 92vw, 460px" fetchpriority="high">\n')
 
 
 def faq_page():
