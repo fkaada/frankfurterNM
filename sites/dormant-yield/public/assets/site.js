@@ -17,14 +17,22 @@
   }
   guard();
 
-  // ---------- mega menu: close on outside click, Escape, or link click ----------
-  var mega = document.querySelector("details.mega");
-  if (mega) {
-    document.addEventListener("click", function (ev) { if (mega.open && !mega.contains(ev.target)) mega.open = false; });
-    document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && mega.open) { mega.open = false; mega.querySelector("summary").focus(); } });
-    mega.addEventListener("click", function (ev) { if (ev.target.closest("a")) mega.open = false; });
-    mega.addEventListener("toggle", function () { if (mega.open && window.innerWidth > 760) { var q = mega.querySelector(".q"); if (q) q.focus(); } });
-  }
+  // ---------- mega menus: one open at a time; close on outside click, Escape or link click ----------
+  var megas = Array.prototype.slice.call(document.querySelectorAll("details[data-mega]"));
+  megas.forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (!d.open) return;
+      megas.forEach(function (o) { if (o !== d) o.open = false; });
+      if (window.innerWidth > 960 && !d.classList.contains("nav-m")) { var q = d.querySelector(".q"); if (q) q.focus({ preventScroll: true }); }
+    });
+    d.addEventListener("click", function (ev) { if (ev.target.closest("a[href]")) d.open = false; });
+  });
+  document.addEventListener("click", function (ev) { megas.forEach(function (d) { if (d.open && !d.contains(ev.target)) d.open = false; }); });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key !== "Escape") return;
+    megas.forEach(function (d) { if (d.open) { d.open = false; d.querySelector("summary").focus(); } });
+  });
+  window.addEventListener("resize", function () { megas.forEach(function (d) { if (d.open && d.offsetParent === null) d.open = false; }); });
 
   // ---------- search over /assets/index.json ----------
   var index = null, loading = null;
@@ -66,6 +74,8 @@
       var v = input.value.trim().toLowerCase(), shown = 0;
       items.forEach(function (li) { var hit = !v || li.getAttribute("data-name").indexOf(v) > -1; li.hidden = !hit; if (hit) shown++; });
       document.querySelectorAll("[data-group]").forEach(function (g) { g.hidden = !g.querySelector("li:not([hidden])"); });
+      var more = document.getElementById("more-industries");
+      if (more && v) more.open = !!more.querySelector("li:not([hidden])");
       if (count) count.textContent = v ? shown + " of " + items.length + " industries" : "";
     });
   });
@@ -138,13 +148,24 @@
 
     var items = ["Written confirmation of your authority to license the records", "A list of systems, years covered and rough volumes", "Where employee and customer personal data sits"];
     if (z === "unknown") items.unshift("Peak headcount (micro1 lists 30 or more)");
+    if (c === "ca" && s === "defunct") return render("warn", "Check authority first", "A dissolved Canadian corporation's remaining property generally vests in the Crown.",
+      "The corporation may need reviving before anyone can license its records. Take advice before applying anywhere.",
+      ["Check status with Corporations Canada or the provincial registry", "Ask a lawyer whether revival is possible and worthwhile", "Check the records still exist and can be exported"]);
+    if (c === "au" && s === "defunct") return render("warn", "Check authority first", "A deregistered Australian company's property vests in ASIC.",
+      "The company may need reinstating before anyone can license its records. Take advice before applying anywhere.",
+      ["Check status on the ASIC register", "Ask a lawyer whether reinstatement is possible and worthwhile", "Check the records still exist and can be exported"]);
     if (c === "us" && s === "defunct") {
       items.unshift("Who can act for the dissolved corporation under state law, or which bankruptcy estate holds the records");
       return render("warn", "Worth checking authority", "micro1 accepts defunct US companies. Authority comes first.", "Confirm who can sign before you apply. micro1 decides what qualifies.", items, applyLink());
     }
-    if (c !== "gb" && c !== "us") {
+    if (["gb", "us", "ca", "au"].indexOf(c) < 0) {
       items.unshift("Local advice on who controls the company's assets in " + NAMES[c]);
-      return render("go", "Worth a conversation", "micro1 lists companies based in " + NAMES[c] + ".", "Our rights guidance is UK and US only, so take local advice. micro1 decides what qualifies. Have these ready:", items, applyLink());
+      return render("go", "Worth a conversation", "micro1 lists companies based in " + NAMES[c] + ".", "Our rights guides cover the UK, US, Canada and Australia, so take local advice. micro1 decides what qualifies. Have these ready:", items, applyLink());
+    }
+    if (c === "ca" || c === "au") {
+      render("go", "Worth a conversation", "On micro1's published criteria, this looks worth an application.", "micro1 decides what qualifies. Read our " + NAMES[c] + " guide, then have these ready:", items,
+        '<p><a href="/countries/' + (c === "ca" ? "canada" : "australia") + '">' + (c === "ca" ? "Canada" : "Australia") + " rights guide →</a></p>" + applyLink());
+      return;
     }
     render("go", "Worth a conversation", "On micro1's published criteria, this looks worth an application.", "micro1 decides what qualifies. Have these ready before you start:", items, applyLink());
   }

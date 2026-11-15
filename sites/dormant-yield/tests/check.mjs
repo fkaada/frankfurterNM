@@ -128,6 +128,9 @@ const resolveLocal = (u) => {
 for (const f of html) {
   const rel = relative(root, f);
   const src = readFileSync(f, "utf8");
+  const ids = [...src.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  const dup = ids.filter((x, i) => ids.indexOf(x) !== i);
+  if (dup.length) fail(rel, `duplicate id(s): ${[...new Set(dup)].join(", ")}`);
   if (src.includes('data-partner="micro1-company"') && !/Referral link/.test(src)) fail(rel, "partner link without 'Referral link' disclosure");
   for (const m of src.matchAll(/\s(?:href|src)="(\/[^"]*)"/g)) if (!resolveLocal(m[1])) fail(rel, `broken internal link: ${m[1]}`);
 }

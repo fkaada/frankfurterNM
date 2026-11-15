@@ -11,14 +11,22 @@
 - micro1 decides what qualifies. We never see, buy, hold or value company records.
 
 ## Key pages
-- [Home: how it works, rights check, fit check, FAQ](https://dormantyield.com/)
-- [Fifty industry guides](https://dormantyield.com/industries)
+- [Home: overview, rights check, fit check](https://dormantyield.com/)
+- [How it works](https://dormantyield.com/how-it-works)
+- [For officeholders](https://dormantyield.com/officeholders)
+- [Countries: ten listed, big four guides](https://dormantyield.com/countries)
+- [United Kingdom](https://dormantyield.com/countries/united-kingdom) · [United States](https://dormantyield.com/countries/united-states) · [Canada](https://dormantyield.com/countries/canada) · [Australia](https://dormantyield.com/countries/australia)
+- [Industry guides: 30 listed, 50 covered](https://dormantyield.com/industries)
+- [FAQ](https://dormantyield.com/faq)
+- [About](https://dormantyield.com/about)
 - [Privacy](https://dormantyield.com/privacy)
 - [Legal and disclosures](https://dormantyield.com/legal)
 
 ## Rights, in short
 - UK: in administration or liquidation the officeholder controls the assets. A dissolved company's property generally passes to the Crown as bona vacantia (Companies Act 2006, s.1012) until the company is restored.
 - US: in bankruptcy the trustee sells estate assets with court approval (11 U.S.C. §363); a consumer privacy ombudsman may be appointed where a privacy policy restricted transfers (11 U.S.C. §§332, 363(b)(1)).
+- Canada: in bankruptcy the licensed insolvency trustee holds the property (Bankruptcy and Insolvency Act); a dissolved federal corporation's remaining property generally vests in the Crown (Canada Business Corporations Act, s.228).
+- Australia: in liquidation or voluntary administration the liquidator or administrator controls the property; a deregistered company's property vests in ASIC (Corporations Act 2001, s.601AD).
 - Employee and HR records are the most sensitive part of company data.
 
 General information, not legal advice.
