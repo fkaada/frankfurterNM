@@ -1,0 +1,73 @@
+# Dormant Yield: handover
+
+15 November 2026. One page for Fred and the team: what exists, how to change it, and what is left to do by hand.
+
+## What exists
+- **Live site:** https://dormant-yield-nordic-mar-tech.vercel.app. Vercel project `dormant-yield`, team Nordic MarTech. It moves to https://dormantyield.com once DNS is switched.
+- **Pages (93):**
+  - home
+  - how it works
+  - for officeholders
+  - 14 country guides: SME and enterprise for the UK, US, Canada and Australia, plus one short guide for each of India, Singapore, Ireland, the Netherlands, Germany and France
+  - 4 rights guides
+  - 50 industry pages: 30 listed, 10 of them key niches
+  - 8 insight articles
+  - readiness checklist, FAQ, about, privacy, legal, 404
+- **The one micro1 link** (locked by Fred, 15 Nov): `https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0`
+- **Quality at handover:**
+  - Lighthouse (phone): performance 96–99; accessibility, best practices and SEO 100.
+  - axe: 0 violations.
+  - 276 page loads at 360, 768 and 1280 px: 0 failures.
+  - Works without JavaScript.
+  - No cookies and no third-party requests.
+
+## How to change things
+| Change | Where | Then |
+|---|---|---|
+| Home copy | `content/home.html` | build, check, deploy |
+| Privacy, legal, about, how it works, officeholders | `content/*.html` | same |
+| An insight article | add `content/blog/<slug>.html` (copy an existing header block) | same, then `node scripts/og.js` for its share card |
+| Industry facts and systems | `data/industries.py` | same |
+| Rights guides (big four) | `RIGHTS` in `scripts/build.py` | same, plus a lawyer check |
+| Country guides | `scripts/v4.py` (`SIZES`, `LOCAL`) | same |
+| Styles and behaviour | `public/assets/site.css`, `public/assets/site.js` | same |
+
+**Commands**, run from `sites/dormant-yield`:
+```bash
+python3 scripts/build.py          # regenerate pages, search index and sitemap
+node scripts/og.js                # share cards (only when titles change; needs Playwright)
+node tests/check.mjs --launch     # the gate: must say ok
+```
+
+**Deploy:** commit and push. Until GitHub is connected to Vercel, set `SHA=` in `scripts/deploy.sh` to the new commit and redeploy (ask Claude). After any deploy, run `node scripts/live-check.mjs`.
+
+## Rules the gate enforces (the build fails if broken)
+- The micro1 link is byte-exact everywhere, and every page with it carries the "Referral link" disclosure.
+- None of these words: "referral partner", "partner of micro1", "guarantee", "unlock", "unlimited", "zero risk", "100%".
+- No amounts ($, £, € or "k/m/million") and no salesy words.
+- Owner details on every page.
+- No external scripts, styles or images; no inline code (strict CSP).
+- One h1 per page, alt text on every image, unique titles, descriptions present.
+- Internal links, sitemap URLs and share images all resolve.
+- Production deploys fail if any partner fact is still marked pending.
+
+## Manual tasks, in order (also on Fred's Task Board, Dormant Yield lane)
+| # | Task | Owner | Blocks |
+|---|---|---|---|
+| P1 | GoDaddy DNS on all three domains, plus the Search Console TXT record and sitemap | Fred | Launch |
+| P8 | Say "DNS done"; Claude runs `live-check.mjs`; Fred click-tests the micro1 link once | Claude + Fred | Launch sign-off |
+| P3 | Vercel Firewall rules (Bot Protection Log 7 days, AI bots Log, deny probe paths, rate limit 300 per 5 min, then Challenge) | Vinni, Fred confirms | Outreach |
+| P2 | Connect GitHub to Vercel (repo, root `sites/dormant-yield`, build `node tests/check.mjs`, production branch) | Fred, Vinni helps | Smooth releases |
+| P9 | Skim and approve guides, insights, checklist ("v4 ok") | Fred, after Astrid's QA | Outreach |
+| P7 | Lawyer read: privacy, legal, guides and every statute citation | Fred | Outreach |
+| P4 | Outreach mailbox and mail DNS on dormantyields.com, then the 6-week warm-up | Fred | Outreach |
+| P5 | "No mail" SPF and DMARC records on dormantyield.com and .co.uk | Fred | Brand safety |
+| P6 | Postal address for the outreach signature (US CAN-SPAM) | Fred | US outreach |
+| P10 | Optional: connect an image worker in BrainMate | Fred | Nice to have |
+
+## Known limits
+- Statute citations come from Claude's knowledge and await the lawyer read (P7).
+- The 50 industry pages are built from one template; customise only those with Search Console traction (docs/V5-BACKLOG.md).
+- The site lives in the frankfurterNM repo. A separate `fkaada/dormant-yield` repo is recommended (steps in docs/DEPLOY.md).
+- The Claude–Vercel connection cannot change the firewall.
+- No analytics; attribution comes from micro1's referral portal only.

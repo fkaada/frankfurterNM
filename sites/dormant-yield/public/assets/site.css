@@ -244,7 +244,7 @@ details.mega[open] summary::after{transform:rotate(-135deg) translateY(-2px)}
 .m-ctl{display:flex;gap:14px;align-items:center}
 .m-range{flex:1;accent-color:var(--forest);min-height:44px}
 @media (max-width:760px){.m-track{grid-template-columns:1fr 1fr}}
-@media (max-width:412px){.m-track{grid-template-columns:1fr}.m-step{opacity:1}.m-step.is-cur{transform:none}.m-ctl{display:none}.m-bar{display:none}.m-cap{display:none}}
+@media (max-width:412px){.m-track{grid-template-columns:1fr}.m-step{opacity:1}.m-step.is-cur{transform:none}.machine .m-ctl{display:none}.machine .m-bar{display:none}.machine .m-cap{display:none}}
 @media (prefers-reduced-motion: reduce){.m-step,.m-ico,.m-bar span{transition:none}.m-step.is-cur{transform:none}}
 
 /* countries */

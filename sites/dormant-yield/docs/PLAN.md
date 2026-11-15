@@ -102,7 +102,7 @@ Channel attribution without touching the link: clean landing paths such as `/l/l
 7. **Banned words, kept from the data.nordicmartech.com rules:** guarantee, unlock, unlimited, zero risk, 100%, capital, "worth millions". The logo tagline "Unlocking value in dormant data" is fine on artwork, but the site copy avoids it.
 8. **Answer first, link second, pitch never** in communities. On LinkedIn or Reddit, answer the question. Link to a guide only if it answers better than your reply. Never post the raw referral link.
 9. **Outreach: no link in message one.** Ask whether data was part of the asset schedule. Send the page only if they reply.
-10. **Do not overclaim our role.** "Independent referral partner." Never "partner of", "on behalf of" or "representing" micro1 (their terms forbid it).
+10. **Do not overclaim our role.** "Independent referrer." Never "partner", "partner of", "on behalf of" or "representing" micro1 (their terms and our rules forbid it).
 
 ## 6. Open items for Fred
 

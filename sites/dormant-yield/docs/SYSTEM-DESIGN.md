@@ -1,6 +1,6 @@
 # Dormant Yield: system design
 
-Status 15 November 2026. Release e4c2629 is served on Vercel; the custom domains are waiting for GoDaddy DNS.
+Status 15 November 2026. Release 7901e19 (v6) is served on Vercel; the custom domains are waiting for GoDaddy DNS.
 
 ## 1. Requirements
 
@@ -29,7 +29,8 @@ Status 15 November 2026. Release e4c2629 is served on Vercel; the custom domains
 
 ```
  data/industries.py ─┐
- content/*.html ─────┤  scripts/build.py   ┌─ public/*.html (64 pages)
+ content/*.html ─────┤  scripts/build.py   ┌─ public/*.html (93 pages)
+ content/blog/*.html ┤  + scripts/v4.py     │  guides, blog, checklist, visuals
  RIGHTS, COUNTRIES ──┘  (Python, no deps) ─┼─ public/assets/index.json (search)
                                            └─ public/sitemap.xml
                                    │
@@ -46,6 +47,11 @@ Status 15 November 2026. Release e4c2629 is served on Vercel; the custom domains
 ```
 
 **Data flow:** there is no runtime data. The page fetches only one same-origin file, `index.json`, and only when someone uses search. Attribution lives in micro1's referral portal.
+
+Supporting scripts:
+- `scripts/og.js` renders share cards locally with Playwright (`public/img/og/*.jpg`, committed).
+- `scripts/live-check.mjs` verifies the live domain after any deploy: HTTPS, redirects, pages, headers, micro1 links and share images.
+- `scripts/deploy.sh` is the Vercel build step until GitHub is connected.
 
 ## 3. Deep dive
 
