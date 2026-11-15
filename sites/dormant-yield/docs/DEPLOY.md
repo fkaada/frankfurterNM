@@ -1,6 +1,6 @@
 # Hosting, domains and launch
 
-## Status, 15 November 2026 (release 89d4101, v4 + accessibility fixes; axe 0 violations): published on Vercel, custom domains wait for GoDaddy DNS
+## Status, 15 November 2026 (release 50ebda2, v6: mobile masthead, content-built visuals, share cards; axe 0 violations): published on Vercel, custom domains wait for GoDaddy DNS
 
 - **Vercel project:** `dormant-yield` in team Nordic MarTech (`prj_1tqOBfFP28DV7CE2L967uOaqeFGL`). Production: https://dormant-yield-nordic-mar-tech.vercel.app (served, launch gate passed: 93 pages, 81 partner links, locked link intact; stress test 276 page loads at 360/768/1280 px, 0 failures).
 - **Domains added to the project:** dormantyield.com, www.dormantyield.com, dormantyield.co.uk, www.dormantyield.co.uk, dormantyields.com, www.dormantyields.com. All six still point at GoDaddy parking (3.33.130.190, 15.197.148.33).
