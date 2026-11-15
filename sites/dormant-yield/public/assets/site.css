@@ -154,6 +154,7 @@ footer .brand b{color:var(--sprout)}
 
 /* utilities (no inline styles: CSP blocks them) */
 .pt0{padding-top:0}
+.band + .pt0,.fit + .pt0{padding-top:clamp(56px,8vw,96px)}
 .mt12{margin-top:12px}
 .mt20{margin-top:20px}
 .mt28{margin-top:28px}
