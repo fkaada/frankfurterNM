@@ -148,6 +148,8 @@ for (const f of html) {
   for (const m of src.matchAll(/<img\b[^>]*>/g)) if (!/\salt="/.test(m[0])) fail(rel, `img without alt: ${m[0].slice(0, 60)}`);
   const t = (src.match(/<title>([^<]+)<\/title>/) || [])[1] || "";
   if (titles.has(t)) fail(rel, `duplicate <title> with ${titles.get(t)}`); else titles.set(t, rel);
+  const og = (src.match(/<meta property="og:image" content="https:\/\/dormantyield\.com([^"]+)"/) || [])[1];
+  if (!og || !resolveLocal(og)) fail(rel, `og:image missing or not found: ${og}`);
   const d = (src.match(/<meta name="description" content="([^"]*)"/) || [])[1];
   if (!d) fail(rel, "missing meta description");
   else if (d.length > 175 || d.length < 50) warns.push(`${rel}: description ${d.length} chars`);

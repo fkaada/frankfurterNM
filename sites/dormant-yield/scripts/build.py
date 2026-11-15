@@ -154,7 +154,7 @@ def header():
     return f'''<a class="skip" href="#top">Skip to content</a>
 <div class="masthead">
 <aside class="disclose" aria-label="Referral disclosure">
-  <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">We may earn a referral fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
+  <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a qualifying deal completes through our link, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">Independent referrer: we may earn a fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
 </aside>
 <header class="top">
   <div class="wrap">
@@ -169,7 +169,7 @@ def header():
       <details class="mega" data-mega><summary>Guides</summary><div class="mega-panel narrow">{gd_panel}</div></details>
     </nav>
     <div class="hdr-end">
-      <a class="btn btn-primary hdr-cta" href="/#fit-check">Check your fit</a>
+      <a class="btn btn-primary hdr-cta" href="/#fit-check"><span class="cta-l">Check your fit</span><span class="cta-s">Fit check</span></a>
       <details class="mega nav-m" data-mega>
         <summary aria-label="Menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-label">Menu</span></summary>
         <div class="mega-panel sheet">
@@ -202,7 +202,9 @@ def footer():
             .replace("{JS}", asset("/assets/site.js")).replace("{IDX}", asset("/assets/index.json")))
 
 
-def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg"):
+def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None):
+    if visual:
+        body = v4.with_visual(body, visual)
     url = SITE + ("/" if path == "" else "/" + path)
     ld = f'<script type="application/ld+json">\n{json.dumps(jsonld, ensure_ascii=False, indent=1)}\n</script>\n' if jsonld else ""
     can = f'<link rel="canonical" href="{url}">\n' if canonical else ""
@@ -366,8 +368,10 @@ def country_pages():
         ld = {"@context": "https://schema.org", "@graph": [ORG,
               {"@type": "WebPage", "name": f"{n}: who can license a closed company's records", "url": f"{SITE}/countries/{slug}", "inLanguage": "en-GB", "dateModified": LASTMOD},
               crumbs(("Home", "/"), ("Countries", "/countries"), (n, f"/countries/{slug}"))]}
+        og = v4.og_job(f"country-{slug}", "seal", c=c, n=n, title=f"{n}: who can license a closed company's records", sub=r["roles"])
         page(f"countries/{slug}", f"{n}: who can license closed company records | Dormant Yield",
-             f"{n}: who controls a closed or closing company's records, what happens after dissolution, personal data rules, and micro1's published criteria.", body, ld)
+             f"{n}: who controls a closed or closing company's records, what happens after dissolution, personal data rules, and micro1's published criteria.", body, ld,
+             og_image=og, visual=v4.seal(c, n, r["roles"], "Rights guide · main focus"))
 
     cards = "".join(
         f'<li><a href="/countries/{slug}"><img src="/img/flags/{c}.svg" width="36" height="24" alt=""><strong>{e(n)}</strong><span>{e(RIGHTS[c]["roles"])}</span><em>Main focus · full guide</em></a></li>'
@@ -405,7 +409,7 @@ def industry_pages():
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/industries">Industries</a> / <span>{e(i["name"])}</span></nav>
 <span class="eyebrow">{e(i["group"])}</span>
 <h1>{e(i["name"])}: records from closed and closing <em>companies</em></h1>
-<p class="lede">If you control the assets of {e(with_article(phrase(i["name"])))} company in administration, liquidation or bankruptcy, its operational records may be licensable. Here is what usually exists, what needs care and how to check fit.</p>
+<p class="lede">If you control the assets of a company in the {e(phrase(i["name"]))} sector that is in administration, liquidation or bankruptcy, its operational records may be licensable. Here is what usually exists, what needs care and how to check fit.</p>
 {why}
 </div></section>
 <section class="pt0"><div class="wrap two">
@@ -431,7 +435,7 @@ def industry_pages():
               crumbs(("Home", "/"), ("Industries", "/industries"), (i["name"], f'/industries/{i["slug"]}'))]}
         page(f'industries/{i["slug"]}', f'{i["name"]}: closed company records | Dormant Yield',
              f'{i["name"]}: which records from closed and closing companies may be licensable, what needs care, and micro1\'s criteria.',
-             body, ld, og_image="/img/og.jpg")
+             body, ld, og_image="/img/og.jpg", visual=v4.drawer(i["name"], i["group"], i["records"]))
 
     groups = sorted({i["group"] for i in INDS}, key=lambda g: (-sum(1 for i in INDS if i["group"] == g and i["key"]), g))
     def card(i):
@@ -451,6 +455,7 @@ def industry_pages():
 <h1>Thirty industries listed. Fifty <em>covered.</em></h1>
 <p class="lede">micro1 lists its defunct-company track as open to all industries. Thirty industries are listed here, with ten key niches marked: record-rich sectors where closing companies often had 30 or more staff. Open the expanded view, or search, for all 50.</p>
 <div class="mega-search page-search"><label for="q-page">Filter industries</label><input id="q-page" class="q" type="search" placeholder="Type to filter, e.g. energy" autocomplete="off" data-filter=".grp li"></div>
+<div class="chips" role="group" aria-label="Filter by sector">{"".join(f'<button type="button" class="chip" data-chip="{e(g.lower())}" aria-pressed="false">{e(g)}</button>' for g in groups)}</div>
 <p class="small muted" id="filter-count" aria-live="polite"></p>
 {sections}
 </div></section>'''
@@ -523,4 +528,5 @@ if __name__ == "__main__":
     country_pages()
     industry_pages()
     text_pages()
+    (ROOT / "scripts/og-jobs.json").write_text(json.dumps(v4.OG_JOBS, ensure_ascii=False, indent=1))
     print(f"built: home, industries index, {len(INDS)} industry pages, text pages, index.json, sitemap.xml")

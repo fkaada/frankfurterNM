@@ -116,8 +116,10 @@ def guide_big(c, n, slug, size):
           {"@type": "Article", "headline": f"{n}: a step-by-step guide for {S['label']}", "inLanguage": "en-GB", "datePublished": B["LASTMOD"], "dateModified": B["LASTMOD"],
            "author": {"@id": B["SITE"] + "/#org"}, "publisher": {"@id": B["SITE"] + "/#org"}, "mainEntityOfPage": f'{B["SITE"]}/guides/{slug}/{size}'},
           B["crumbs"](("Home", "/"), ("Guides", "/guides"), (n, f"/guides/{slug}"), ("SMEs" if size == "sme" else "Enterprises", f"/guides/{slug}/{size}"))]}
+    og = og_job(f"guide-{slug}-{size}", "seal", c=c, n=n, title=f"{n}: a step-by-step guide for {S['label']}", sub=S["range"].capitalize())
     B["page"](f"guides/{slug}/{size}", f"{n} guide for {S['label']} | Dormant Yield",
-              f"Six steps for {S['label']} in {n} with {S['range']}: authority, status, records, personal data, fit check and contract.", body, ld)
+              f"Six steps for {S['label']} in {n} with {S['range']}: authority, status, records, personal data, fit check and contract.", body, ld,
+              og_image=og, visual=seal(c, n, R["roles"], f"Guide for {S['label']}"))
 
 
 def guide_country_hub(c, n, slug):
@@ -134,8 +136,10 @@ def guide_country_hub(c, n, slug):
 </div></section>
 {next_cards("fit", "ready", "blog")}'''
     ld = {"@context": "https://schema.org", "@graph": [B["ORG"], B["crumbs"](("Home", "/"), ("Guides", "/guides"), (n, f"/guides/{slug}"))]}
+    og = og_job(f"guide-{slug}", "seal", c=c, n=n, title=f"{n}: guides for SMEs and enterprises", sub="Six steps from authority to a signed licence")
     B["page"](f"guides/{slug}", f"{n} guides for SMEs and enterprises | Dormant Yield",
-              f"Step-by-step guides for SMEs and enterprises in {n}: licensing a closed or closing company's records responsibly.", body, ld)
+              f"Step-by-step guides for SMEs and enterprises in {n}: licensing a closed or closing company's records responsibly.", body, ld,
+              og_image=og, visual=seal(c, n, B["RIGHTS"][c]["roles"], "Main focus"))
 
 
 def guide_local(c, n):
@@ -159,8 +163,10 @@ def guide_local(c, n):
 <section class="pt0"><div class="wrap">{cta_band()}</div></section>
 {next_cards("ready", "guides", "fit")}'''
     ld = {"@context": "https://schema.org", "@graph": [B["ORG"], B["crumbs"](("Home", "/"), ("Guides", "/guides"), (n, f"/guides/{slug}"))]}
+    og = og_job(f"guide-{slug}", "seal", c=c, n=n, title=f"{n}: licensing a closed company's records", sub=L["law"])
     B["page"](f"guides/{slug}", f"{n}: closed company records guide | Dormant Yield",
-              f"{n}: who usually controls a closed company's assets, which laws apply to personal data, and six steps to check fit with micro1.", body, ld)
+              f"{n}: who usually controls a closed company's assets, which laws apply to personal data, and six steps to check fit with micro1.", body, ld,
+              og_image=og, visual=seal(c, n, L["roles"], "On micro1's list"))
 
 
 def guides():
@@ -262,17 +268,19 @@ def blog():
                "datePublished": p["date"], "dateModified": p["date"], "author": {"@id": B["SITE"] + "/#org"}, "publisher": {"@id": B["SITE"] + "/#org"},
                "mainEntityOfPage": f'{B["SITE"]}/blog/{p["slug"]}', "image": B["SITE"] + "/img/og.jpg"},
               B["crumbs"](("Home", "/"), ("Insights", "/blog"), (p["eyebrow"], f'/blog/{p["slug"]}'))]}
-        B["page"](f'blog/{p["slug"]}', p["title"], p["description"], body, ld)
+        og = og_job(f'blog-{p["slug"]}', "cover", c=c, eyebrow=p["eyebrow"], title=p["h1"], date=p["display_date"])
+        B["page"](f'blog/{p["slug"]}', p["title"], p["description"], body, ld, og_image=og,
+                  visual=cover(c, p["eyebrow"], p["h1"], p["display_date"]))
     cards = "".join(
-        f'<li><a href="/blog/{p["slug"]}"><span class="g">{flag(p["country"], 18, "fl inline") + " " if p.get("country") else ""}{e(p["eyebrow"])}</span>'
-        f'<strong>{e(p["h1"])}</strong><span class="w">{e(p["description"])}</span><em>Read →</em></a></li>' for p in posts)
+        f'<li><a href="/blog/{p["slug"]}">{cover(p.get("country", ""), p["eyebrow"], p["h1"], p["display_date"], "sm")}'
+        f'<span class="w">{e(p["description"])}</span><em>Read →</em></a></li>' for p in posts)
     body = f'''<section><div class="wrap stack">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <span>Insights</span></nav>
 <span class="eyebrow">Insights</span>
 <h1>Plain answers for <em>officeholders</em></h1>
 <p class="lede">Short articles on the questions behind every closed company's records: who owns them, what can be shared and how to decide. General information, not legal advice.</p>
 <img class="photo" src="/img/cabinet.webp" width="900" height="538" alt="A dark green filing cabinet with documents turning into charts" loading="lazy">
-<ul class="niches">{cards}</ul>
+<ul class="blog-cards">{cards}</ul>
 </div></section>
 {next_cards("fit", "ready", "guides")}'''
     ld = {"@context": "https://schema.org", "@graph": [B["ORG"], {"@type": "Blog", "name": "Dormant Yield insights", "url": B["SITE"] + "/blog", "inLanguage": "en-GB"},
@@ -280,3 +288,48 @@ def blog():
     B["page"]("blog", "Insights for officeholders | Dormant Yield",
               "Plain-English articles for administrators, liquidators and trustees on company records, bona vacantia, ABCs, 363 sales and personal data.", body, ld)
     return posts
+
+
+# ---------- v6: content-built visuals (no stock, no generated imagery) ----------
+import re as _re
+
+
+def drawer(name, group, records):
+    cards = "".join(
+        f'<div class="dr-card"><span class="dr-k">{n:02d}</span><span class="dr-t">{e(r)}</span></div>'
+        for n, r in enumerate(records[:4], 1))
+    return (f'<div class="drawer"><div class="dr-cards">{cards}</div>'
+            f'<div class="dr-front"><span class="dr-plate">{e(group)}</span><span class="dr-pull"></span></div>'
+            f'<p class="dr-cap">{e(name)} · what usually exists</p></div>')
+
+
+def seal(c, n, roles, tag):
+    return (f'<div class="seal"><div class="seal-ring">{flag(c, 132, "fl seal-fl")}</div>'
+            f'<div class="seal-card"><span>Who usually decides in {e(n)}</span><strong>{e(roles[0].upper() + roles[1:])}</strong></div>'
+            f'<span class="seal-tag">{e(tag)}</span></div>')
+
+
+def cover(c, eyebrow, title, date, size="lg"):
+    fl = flag(c, 30, "fl") if c else '<span class="cv-dot"></span>'
+    return (f'<div class="cover cover-{size}"><span class="cv-top">{fl}<span>{e(eyebrow)}</span></span>'
+            f'<strong class="cv-t">{e(title)}</strong><span class="cv-foot">Dormant Yield · Insights · {e(date)}</span></div>')
+
+
+def with_visual(body, visual):
+    """Turn the first hero section into a two-column hero with a decorative visual on the right."""
+    m = _re.search(r'<section class="ind-hero"><div class="wrap(?: narrow-col)? stack">', body)
+    if not m:
+        return body
+    end = body.index("</div></section>", m.end())
+    inner = body[m.end():end]
+    return (body[:m.start()] + '<section class="ind-hero"><div class="wrap hero2"><div class="stack">' + inner +
+            f'</div><div class="hv" aria-hidden="true">{visual}</div></div></section>' + body[end + len("</div></section>"):])
+
+
+OG_JOBS = []
+
+
+def og_job(slug, kind, **kw):
+    """Queue a share card for scripts/og.js and return its path."""
+    OG_JOBS.append(dict(slug=slug, kind=kind, **kw))
+    return f"/img/og/{slug}.jpg"

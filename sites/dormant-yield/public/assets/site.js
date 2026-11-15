@@ -119,6 +119,17 @@
     });
   });
 
+  document.querySelectorAll("[data-chip]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var q = document.getElementById("q-page"); if (!q) return;
+      var on = b.getAttribute("aria-pressed") === "true";
+      document.querySelectorAll("[data-chip]").forEach(function (x) { x.setAttribute("aria-pressed", "false"); });
+      q.value = on ? "" : b.getAttribute("data-chip");
+      if (!on) b.setAttribute("aria-pressed", "true");
+      q.dispatchEvent(new Event("input"));
+    });
+  });
+
   // ---------- explained machine (scrubbable timeline) ----------
   var m = document.querySelector("[data-machine]");
   if (m) {
@@ -208,7 +219,26 @@
     }
     render("go", "Worth a conversation", "On micro1's published criteria, this looks worth an application.", "micro1 decides what qualifies. Have these ready before you start:", items, applyLink());
   }
-  form.addEventListener("change", update);
+  var GUIDE = { gb: "united-kingdom", us: "united-states", ca: "canada", au: "australia", "in": "india", sg: "singapore", ie: "ireland", nl: "netherlands", de: "germany", fr: "france" };
+  function updateAll() {
+    update();
+    var c = v("country");
+    var extra = document.createElement("p");
+    extra.className = "fc-more";
+    extra.innerHTML = (GUIDE[c] ? '<a href="/guides/' + GUIDE[c] + '">Read the ' + esc(NAMES[c].replace(/^the /, "")) + " guide →</a>" : "") +
+      '<button type="button" class="link-btn" data-copy-result>Copy this answer</button><span class="small muted" data-copy-msg aria-live="polite"></span>';
+    out.appendChild(extra);
+  }
+  out.addEventListener("click", function (ev) {
+    if (!ev.target.closest("[data-copy-result]")) return;
+    var msg = out.querySelector("[data-copy-msg]");
+    var lines = [out.querySelector(".pill").textContent + ": " + out.querySelector("h3").textContent, out.querySelector("h3 + p").textContent];
+    out.querySelectorAll("ul li").forEach(function (li) { lines.push("- " + li.textContent); });
+    lines.push("", "Check yours: https://dormantyield.com/#fit-check");
+    var ok = function () { msg.textContent = " Copied."; }, bad = function () { msg.textContent = " Copy failed. Select the text instead."; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lines.join("\n")).then(ok, bad); else bad();
+  });
+  form.addEventListener("change", updateAll);
   form.addEventListener("submit", function (ev) { ev.preventDefault(); });
-  update();
+  updateAll();
 })();
