@@ -153,9 +153,9 @@ def header():
     gd_panel = f'<ul class="mega-list one">{guides}</ul>'
     return f'''<a class="skip" href="#top">Skip to content</a>
 <div class="masthead">
-<div class="disclose" role="note">
+<aside class="disclose" aria-label="Referral disclosure">
   <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">We may earn a referral fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
-</div>
+</aside>
 <header class="top">
   <div class="wrap">
     <a class="brand" href="/" aria-label="Dormant Yield, home">

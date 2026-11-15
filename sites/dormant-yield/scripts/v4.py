@@ -226,7 +226,7 @@ def readiness():
 <div class="ready-bar"><span class="ready-count" aria-live="polite">0 of {n} done</span><div class="m-bar"><span></span></div></div>
 {"".join(groups)}
 <div class="row"><button type="button" class="btn btn-ghost" data-copy>Copy checklist</button><button type="button" class="btn btn-ghost" data-reset>Clear ticks</button><span class="small muted" data-copied aria-live="polite"></span></div>
-<div class="result" data-ready-result><span class="pill">Not started</span><h3>Tick what is already true.</h3><p>The answer updates as you go.</p></div>
+<div class="result" data-ready-result><span class="pill">Not started</span><h2 class="h3">Tick what is already true.</h2><p>The answer updates as you go.</p></div>
 </div>
 </div></section>
 <section class="pt0"><div class="wrap">{cta_band("Ready on most of these? Check fit in two minutes.")}</div></section>

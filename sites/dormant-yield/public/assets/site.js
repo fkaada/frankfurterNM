@@ -56,7 +56,7 @@
       else if (pct < 0.85) { tone = "warn"; pill = "Getting there"; h = "Close the gaps on people and contracts."; p = "Set employee data aside and check customer and software terms before any sample."; }
       else { tone = "go"; pill = "Ready"; h = "Worth a conversation."; p = "Run the fit check, then apply through micro1. micro1 decides what qualifies."; }
       rres.dataset.tone = tone;
-      rres.innerHTML = '<span class="pill">' + esc(pill) + "</span><h3>" + esc(h) + "</h3><p>" + esc(p) + "</p>";
+      rres.innerHTML = '<span class="pill">' + esc(pill) + '</span><h2 class="h3">' + esc(h) + "</h2><p>" + esc(p) + "</p>";
     };
     boxes.forEach(function (b) { b.addEventListener("change", rcUpdate); });
     rc.querySelector("[data-reset]").addEventListener("click", function () { boxes.forEach(function (b) { b.checked = false; }); rcUpdate(); });

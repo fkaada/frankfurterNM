@@ -6,7 +6,7 @@
 /* Layout: one calm column on cream, deep-green bands for the two moments that matter (rights check, fit check). */
 :root{
   --paper:#F3F0E6; --paper-2:#E9E5D7; --ink:#0B2A22; --ink-soft:#3D5750;
-  --forest:#0E4A3A; --forest-deep:#0A3529; --sprout:#1FA971; --sprout-ink:#0D7A4F;
+  --forest:#0E4A3A; --forest-deep:#0A3529; --sprout:#1FA971; --sprout-ink:#0A6B45; --sprout-on-dark:#4BE0A0;
   --line:#D5D0BF; --on-forest:#EEF4EF; --on-forest-soft:#B9CEC4; --warn:#9A5B12; --warn-bg:#F6E7CF;
   --display:"Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --body:"DM Sans", "Segoe UI", system-ui, sans-serif;
@@ -14,11 +14,11 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --paper:#0C1714; --paper-2:#12211C; --ink:#E7EFEA; --ink-soft:#A5B8B0;
-  --forest:#0F3A2F; --forest-deep:#0A2A22; --sprout:#36C98C; --sprout-ink:#5FE0A7;
+  --forest:#0F3A2F; --forest-deep:#0A2A22; --sprout:#36C98C; --sprout-ink:#5FE0A7; --sprout-on-dark:#5FE0A7;
   --line:#21352E; --on-forest:#EEF4EF; --on-forest-soft:#A9C2B7; --warn:#F2B866; --warn-bg:#2E2414; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#0C1714; --paper-2:#12211C; --ink:#E7EFEA; --ink-soft:#A5B8B0;
-  --forest:#0F3A2F; --forest-deep:#0A2A22; --sprout:#36C98C; --sprout-ink:#5FE0A7;
+  --forest:#0F3A2F; --forest-deep:#0A2A22; --sprout:#36C98C; --sprout-ink:#5FE0A7; --sprout-on-dark:#5FE0A7;
   --line:#21352E; --on-forest:#EEF4EF; --on-forest-soft:#A9C2B7; --warn:#F2B866; --warn-bg:#2E2414; color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -497,3 +497,10 @@ header.top .wrap{transition:padding .2s}
 .band .band-card .src{color:var(--ink-soft);border-color:var(--line)}
 .win3 img{border-radius:50%;object-fit:cover;width:64px;height:64px}
 .cta-band .btn-light{color:var(--forest-deep)}
+
+/* a11y fixes (axe, 15 Nov): readable green on dark bands, readable timeline steps */
+.band .eyebrow,.band h2 em,.jur4 .more,footer .brand b{color:var(--sprout-on-dark)}
+.m-step{opacity:1}
+.m-step:not(.is-on) .m-ico{opacity:.45}
+.m-step:not(.is-on) b{color:var(--ink-soft)}
+aside.disclose{display:block}
