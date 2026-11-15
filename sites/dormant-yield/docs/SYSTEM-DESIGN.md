@@ -29,7 +29,7 @@ Status 15 November 2026. Release 7901e19 (v6) is served on Vercel; the custom do
 
 ```
  data/industries.py ─┐
- content/*.html ─────┤  scripts/build.py   ┌─ public/*.html (93 pages)
+ content/*.html ─────┤  scripts/build.py   ┌─ public/*.html (94 pages)
  content/blog/*.html ┤  + scripts/v4.py     │  guides, blog, checklist, visuals
  RIGHTS, COUNTRIES ──┘  (Python, no deps) ─┼─ public/assets/index.json (search)
                                            └─ public/sitemap.xml

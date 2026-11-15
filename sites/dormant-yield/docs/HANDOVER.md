@@ -4,7 +4,7 @@
 
 ## What exists
 - **Live site:** https://dormant-yield-nordic-mar-tech.vercel.app. Vercel project `dormant-yield`, team Nordic MarTech. It moves to https://dormantyield.com once DNS is switched.
-- **Pages (93):**
+- **Pages (94):**
   - home
   - how it works
   - for officeholders
@@ -12,7 +12,7 @@
   - 4 rights guides
   - 50 industry pages: 30 listed, 10 of them key niches
   - 8 insight articles
-  - readiness checklist, FAQ, about, privacy, legal, 404
+  - readiness checklist, glossary, FAQ, about, privacy, legal, 404
 - **The one micro1 link** (locked by Fred, 15 Nov): `https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0`
 - **Quality at handover:**
   - Lighthouse (phone): performance 96–99; accessibility, best practices and SEO 100.
@@ -25,7 +25,9 @@
 | Change | Where | Then |
 |---|---|---|
 | Home copy | `content/home.html` | build, check, deploy |
-| Privacy, legal, about, how it works, officeholders | `content/*.html` | same |
+| Privacy, legal, about, how it works, officeholders, glossary | `content/*.html` | same |
+| Terms auto-linked to the glossary | `GLOSS_LINKS` in `scripts/build.py` | same |
+| Diagrams (records sieve, who-gains flow) | `sieve()`, `flow()` in `scripts/v4.py` | same |
 | An insight article | add `content/blog/<slug>.html` (copy an existing header block) | same, then `node scripts/og.js` for its share card |
 | Industry facts and systems | `data/industries.py` | same |
 | Rights guides (big four) | `RIGHTS` in `scripts/build.py` | same, plus a lawyer check |
@@ -64,6 +66,9 @@ node tests/check.mjs --launch     # the gate: must say ok
 | P5 | "No mail" SPF and DMARC records on dormantyield.com and .co.uk | Fred | Brand safety |
 | P6 | Postal address for the outreach signature (US CAN-SPAM) | Fred | US outreach |
 | P10 | Optional: connect an image worker in BrainMate | Fred | Nice to have |
+
+## Home page order (v7)
+Hero, then a numbered path: 1 who this is for, 2 what is licensed, 3 how it works, 4 fit check, 5 checks before you talk to a buyer, then countries, sectors, who gains, 6 apply, our role, further reading, FAQ.
 
 ## Known limits
 - Statute citations come from Claude's knowledge and await the lawyer read (P7).
