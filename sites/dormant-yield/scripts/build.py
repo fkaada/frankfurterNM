@@ -353,7 +353,7 @@ def country_pages():
 </dl>
 <div class="row mt12"><a class="btn btn-primary" href="/#fit-check">Check your fit</a>{apply_link()}</div>
 <p class="small muted">Referral link. As an independent referrer we may receive a fee from micro1 if a qualifying deal completes. You pay nothing. micro1 decides what qualifies.</p>
-<p class="small muted">General information, not legal advice. Insolvency and privacy rules depend on the facts and on the province or state. Take advice before agreeing anything.</p>
+<p class="small muted">General information, not legal advice. Insolvency and privacy rules depend on the facts{ {"gb": "", "us": " and the state", "ca": " and the province", "au": " and the state"}[c] }. Take advice before agreeing anything.</p>
 <h2 class="h3 mt20">Other big-four guides</h2><ul class="tags">{others}<li><a href="/countries">All ten countries</a></li></ul>
 </div></section>"""
         ld = {"@context": "https://schema.org", "@graph": [ORG,
