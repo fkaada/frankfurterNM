@@ -4,7 +4,7 @@
 # from the public GitHub repo, runs the launch gate, then serves public/.
 # To ship a new version: commit and push, set SHA to the new commit, redeploy.
 set -e
-SHA=a97cdcff12e7626eeeda3e6e139780c4f7bc4848
+SHA=3a6d518f03b4755bc282b304d942edb28632595b
 curl -fsSL "https://codeload.github.com/fkaada/frankfurterNM/tar.gz/$SHA" -o src.tgz
 mkdir -p src
 tar xzf src.tgz -C src --strip-components=1
