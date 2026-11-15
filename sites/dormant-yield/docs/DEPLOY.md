@@ -4,7 +4,7 @@
 
 - **Vercel project:** `dormant-yield` in team Nordic MarTech (`prj_1tqOBfFP28DV7CE2L967uOaqeFGL`). Production: https://dormant-yield-nordic-mar-tech.vercel.app (served, launch gate passed: 93 pages, 81 partner links, locked link intact; stress test 276 page loads at 360/768/1280 px, 0 failures).
 - **Domains added to the project:** dormantyield.com, www.dormantyield.com, dormantyield.co.uk, www.dormantyield.co.uk, dormantyields.com, www.dormantyields.com. All six still point at GoDaddy parking (3.33.130.190, 15.197.148.33).
-- **How it deploys today:** GitHub is not connected to Vercel ("add a Login Connection to your GitHub account"), so production uses `scripts/deploy.sh`: it fetches this repo at a pinned commit and runs the launch gate. Connect GitHub (Vercel → Account Settings → Authentication → GitHub, then Project → Settings → Git → connect `fkaada/frankfurterNM`, root directory `sites/dormant-yield`, build command `node tests/check.mjs`) and pushes deploy automatically.
+- **How it deploys:** GitHub is connected to Vercel (16 November 2026). Project dormant-yield builds `fkaada/frankfurterNM` with root directory `sites/dormant-yield`, build command `node tests/check.mjs`, output `public`; a push to `main` deploys to production. `scripts/deploy.sh` is kept only as a fallback that redeploys a pinned commit.
 - **Firewall:** the Vercel connection used here was refused access to the firewall API. Apply section 4 in the dashboard (Project → Firewall), or reconnect the Vercel integration with firewall access and ask Claude again.
 
 ### After DNS: run `node scripts/live-check.mjs` (checks HTTPS, redirects, every page, headers, every micro1 link, share images)
