@@ -9,8 +9,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const pub = join(root, "public");
 const LAUNCH = process.argv.includes("--launch") || process.env.VERCEL_ENV === "production";
 
-// Locked by Fred, 10 November 2026. Never edit without his written instruction.
-const MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
+// Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Never edit without his written instruction.
+const MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
 
 const OWNER = ["Kaada Nordic MarTech", "936 289 835", "contact@nordicmartech.com"];
 
@@ -116,6 +116,23 @@ if (partnerLinks < 1) fail("public/index.html", "no partner link found");
 const vercel = JSON.parse(readFileSync(join(root, "vercel.json"), "utf8"));
 const csp = vercel.headers.flatMap((h) => h.headers).find((h) => h.key === "Content-Security-Policy")?.value || "";
 if (!csp || /unsafe-inline|unsafe-eval|\*/.test(csp)) fail("vercel.json", "CSP missing or weakened");
+
+// Every page with a partner link carries the disclosure nearby; every internal link resolves; sitemap URLs exist.
+import { existsSync } from "node:fs";
+const resolveLocal = (u) => {
+  const path = u.split("#")[0].split("?")[0];
+  if (path === "/" || path === "") return true;
+  const p = join(pub, path);
+  return existsSync(p) && statSync(p).isFile() || existsSync(p + ".html") || existsSync(join(p, "index.html"));
+};
+for (const f of html) {
+  const rel = relative(root, f);
+  const src = readFileSync(f, "utf8");
+  if (src.includes('data-partner="micro1-company"') && !/Referral link/.test(src)) fail(rel, "partner link without 'Referral link' disclosure");
+  for (const m of src.matchAll(/\s(?:href|src)="(\/[^"]*)"/g)) if (!resolveLocal(m[1])) fail(rel, `broken internal link: ${m[1]}`);
+}
+const sitemap = readFileSync(join(pub, "sitemap.xml"), "utf8");
+for (const m of sitemap.matchAll(/<loc>https:\/\/dormantyield\.com([^<]*)<\/loc>/g)) if (!resolveLocal(m[1] || "/")) fail("public/sitemap.xml", `sitemap URL has no page: ${m[1]}`);
 
 if (pending) {
   const msg = `${pending} partner fact(s) still data-verify-status="pending". Fred must click-check each on micro1's site, then set "verified".`;
