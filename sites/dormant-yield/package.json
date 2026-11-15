@@ -1,0 +1,11 @@
+{
+  "name": "dormant-yield",
+  "private": true,
+  "description": "Dormant Yield static site (dormantyield.com). No dependencies.",
+  "scripts": {
+    "build": "python3 scripts/page.py && node tests/check.mjs",
+    "test": "node tests/check.mjs",
+    "launch-check": "node tests/check.mjs --launch"
+  },
+  "engines": { "node": ">=18" }
+}

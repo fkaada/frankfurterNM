@@ -1,0 +1,242 @@
+[
+ {
+  "slug": "guide-united-kingdom",
+  "kind": "seal",
+  "c": "gb",
+  "n": "United Kingdom",
+  "title": "United Kingdom: guides for SMEs and enterprises",
+  "sub": "Six steps from authority to a signed licence"
+ },
+ {
+  "slug": "guide-united-kingdom-sme",
+  "kind": "seal",
+  "c": "gb",
+  "n": "United Kingdom",
+  "title": "United Kingdom: a step-by-step guide for SMEs",
+  "sub": "30 to 249 staff at their peak"
+ },
+ {
+  "slug": "guide-united-kingdom-enterprise",
+  "kind": "seal",
+  "c": "gb",
+  "n": "United Kingdom",
+  "title": "United Kingdom: a step-by-step guide for enterprises",
+  "sub": "250 or more staff at their peak"
+ },
+ {
+  "slug": "guide-united-states",
+  "kind": "seal",
+  "c": "us",
+  "n": "United States",
+  "title": "United States: guides for SMEs and enterprises",
+  "sub": "Six steps from authority to a signed licence"
+ },
+ {
+  "slug": "guide-united-states-sme",
+  "kind": "seal",
+  "c": "us",
+  "n": "United States",
+  "title": "United States: a step-by-step guide for SMEs",
+  "sub": "30 to 249 staff at their peak"
+ },
+ {
+  "slug": "guide-united-states-enterprise",
+  "kind": "seal",
+  "c": "us",
+  "n": "United States",
+  "title": "United States: a step-by-step guide for enterprises",
+  "sub": "250 or more staff at their peak"
+ },
+ {
+  "slug": "guide-canada",
+  "kind": "seal",
+  "c": "ca",
+  "n": "Canada",
+  "title": "Canada: guides for SMEs and enterprises",
+  "sub": "Six steps from authority to a signed licence"
+ },
+ {
+  "slug": "guide-canada-sme",
+  "kind": "seal",
+  "c": "ca",
+  "n": "Canada",
+  "title": "Canada: a step-by-step guide for SMEs",
+  "sub": "30 to 249 staff at their peak"
+ },
+ {
+  "slug": "guide-canada-enterprise",
+  "kind": "seal",
+  "c": "ca",
+  "n": "Canada",
+  "title": "Canada: a step-by-step guide for enterprises",
+  "sub": "250 or more staff at their peak"
+ },
+ {
+  "slug": "guide-australia",
+  "kind": "seal",
+  "c": "au",
+  "n": "Australia",
+  "title": "Australia: guides for SMEs and enterprises",
+  "sub": "Six steps from authority to a signed licence"
+ },
+ {
+  "slug": "guide-australia-sme",
+  "kind": "seal",
+  "c": "au",
+  "n": "Australia",
+  "title": "Australia: a step-by-step guide for SMEs",
+  "sub": "30 to 249 staff at their peak"
+ },
+ {
+  "slug": "guide-australia-enterprise",
+  "kind": "seal",
+  "c": "au",
+  "n": "Australia",
+  "title": "Australia: a step-by-step guide for enterprises",
+  "sub": "250 or more staff at their peak"
+ },
+ {
+  "slug": "guide-india",
+  "kind": "seal",
+  "c": "in",
+  "n": "India",
+  "title": "India: licensing a closed company's records",
+  "sub": "Insolvency and Bankruptcy Code 2016"
+ },
+ {
+  "slug": "guide-singapore",
+  "kind": "seal",
+  "c": "sg",
+  "n": "Singapore",
+  "title": "Singapore: licensing a closed company's records",
+  "sub": "Insolvency, Restructuring and Dissolution Act 2018"
+ },
+ {
+  "slug": "guide-ireland",
+  "kind": "seal",
+  "c": "ie",
+  "n": "Ireland",
+  "title": "Ireland: licensing a closed company's records",
+  "sub": "Companies Act 2014"
+ },
+ {
+  "slug": "guide-netherlands",
+  "kind": "seal",
+  "c": "nl",
+  "n": "Netherlands",
+  "title": "Netherlands: licensing a closed company's records",
+  "sub": "Bankruptcy Act (Faillissementswet)"
+ },
+ {
+  "slug": "guide-germany",
+  "kind": "seal",
+  "c": "de",
+  "n": "Germany",
+  "title": "Germany: licensing a closed company's records",
+  "sub": "Insolvency Code (Insolvenzordnung)"
+ },
+ {
+  "slug": "guide-france",
+  "kind": "seal",
+  "c": "fr",
+  "n": "France",
+  "title": "France: licensing a closed company's records",
+  "sub": "Commercial Code, Book VI"
+ },
+ {
+  "slug": "blog-section-363-sale-customer-data",
+  "kind": "cover",
+  "c": "us",
+  "eyebrow": "United States",
+  "title": "Section 363 sales and customer data: when a consumer privacy ombudsman is needed",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-company-restoration-to-license-assets",
+  "kind": "cover",
+  "c": "gb",
+  "eyebrow": "United Kingdom",
+  "title": "Restoring a dissolved company to realise its assets: when it is worth it",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-employee-data-in-insolvency",
+  "kind": "cover",
+  "c": "",
+  "eyebrow": "All countries",
+  "title": "Employee data in an insolvency: what has to stay out",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-australia-deregistered-company-asic",
+  "kind": "cover",
+  "c": "au",
+  "eyebrow": "Australia",
+  "title": "Australia: deregistered companies, ASIC and the records left behind",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-chapter-7-trustee-operational-records",
+  "kind": "cover",
+  "c": "us",
+  "eyebrow": "United States",
+  "title": "What a Chapter 7 trustee should know about operational records",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-canada-licensed-insolvency-trustee-records",
+  "kind": "cover",
+  "c": "ca",
+  "eyebrow": "Canada",
+  "title": "Canada: licensed insolvency trustees and company records",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-bona-vacantia-company-records",
+  "kind": "cover",
+  "c": "gb",
+  "eyebrow": "United Kingdom",
+  "title": "Bona vacantia and company records: what happens when a UK company is dissolved",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "blog-assignment-for-benefit-of-creditors-records",
+  "kind": "cover",
+  "c": "us",
+  "eyebrow": "United States",
+  "title": "Assignment for the benefit of creditors: can the assignee license company records?",
+  "date": "15 November 2026"
+ },
+ {
+  "slug": "country-united-kingdom",
+  "kind": "seal",
+  "c": "gb",
+  "n": "United Kingdom",
+  "title": "United Kingdom: who can license a closed company's records",
+  "sub": "Administrators and liquidators (licensed insolvency practitioners)"
+ },
+ {
+  "slug": "country-united-states",
+  "kind": "seal",
+  "c": "us",
+  "n": "United States",
+  "title": "United States: who can license a closed company's records",
+  "sub": "Chapter 7 and Chapter 11 trustees, debtors in possession, receivers and assignees for the benefit of creditors"
+ },
+ {
+  "slug": "country-canada",
+  "kind": "seal",
+  "c": "ca",
+  "n": "Canada",
+  "title": "Canada: who can license a closed company's records",
+  "sub": "Licensed insolvency trustees, receivers and court-appointed monitors"
+ },
+ {
+  "slug": "country-australia",
+  "kind": "seal",
+  "c": "au",
+  "n": "Australia",
+  "title": "Australia: who can license a closed company's records",
+  "sub": "Liquidators, voluntary administrators and receivers (registered liquidators)"
+ }
+]
