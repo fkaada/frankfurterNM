@@ -498,7 +498,7 @@ def text_pages():
         if f.stem == "glossary":
             terms = re.findall(r'<dt id="([^"]+)">(.*?)</dt>\s*<dd>(.*?)</dd>', body, re.S)
             ld = {"@context": "https://schema.org", "@type": "DefinedTermSet", "name": "Dormant Yield glossary", "url": SITE + "/glossary",
-                  "hasDefinedTerm": [{"@type": "DefinedTerm", "name": re.sub("<[^>]+>", "", t), "description": re.sub("<[^>]+>", "", d).strip(),
+                  "hasDefinedTerm": [{"@type": "DefinedTerm", "name": re.sub("<[^>]+>", "", t), "description": re.sub("<[^>]+>", "", re.sub(r'<span class="gl-where">.*?</span>', "", d)).strip(),
                                       "url": f"{SITE}/glossary#{i}"} for i, t, d in terms]}
         page(f.stem, m["title"], m["description"], fill(f'<section><div class="{wrapcls}">{body}</div></section>'), jsonld=ld,
              robots=m.get("robots", "index, follow"), canonical=m.get("canonical", "yes") == "yes")
