@@ -1,0 +1,24 @@
+# Dormant Yield
+
+> Guidance for administrators, liquidators and bankruptcy trustees of closed and closing companies on licensing operational business records to AI developers, and an independent referral route to micro1's Defunct Company Data Partnership. Run by Kaada Nordic MarTech (org. no. 936 289 835, Norway), an independent referrer not affiliated with micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. Companies pay us nothing.
+
+## Facts as micro1 publishes them (checked 15 November 2026, company.micro1.ai/get-started)
+- Track: Defunct Company Data Partnership, for companies that are no longer operating
+- Size: 30+ peak employees
+- Countries: United States, United Kingdom, Canada, India, Australia, Singapore, Ireland, Netherlands, Germany, France
+- Language: English. Industries: open to all industries
+- Timing (micro1.ai/data, checked 10 November 2026): micro1 reviews and approves the data within 30 days, then pays within 30 days of invoice
+- micro1 decides what qualifies. We never see, buy, hold or value company records.
+
+## Key pages
+- [Home: how it works, rights check, fit check, FAQ](https://dormantyield.com/)
+- [Fifty industry guides](https://dormantyield.com/industries)
+- [Privacy](https://dormantyield.com/privacy)
+- [Legal and disclosures](https://dormantyield.com/legal)
+
+## Rights, in short
+- UK: in administration or liquidation the officeholder controls the assets. A dissolved company's property generally passes to the Crown as bona vacantia (Companies Act 2006, s.1012) until the company is restored.
+- US: in bankruptcy the trustee sells estate assets with court approval (11 U.S.C. §363); a consumer privacy ombudsman may be appointed where a privacy policy restricted transfers (11 U.S.C. §§332, 363(b)(1)).
+- Employee and HR records are the most sensitive part of company data.
+
+General information, not legal advice.

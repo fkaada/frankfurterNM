@@ -4,7 +4,7 @@ Run from sites/dormant-yield:  python3 scripts/build.py
 Writes public/*.html, public/industries/*.html, public/assets/index.json and public/sitemap.xml.
 Generated files are committed, so Vercel only serves public/ and runs tests/check.mjs.
 """
-import html, json, pathlib, sys
+import hashlib, html, json, pathlib, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
@@ -39,6 +39,24 @@ def industries():
 
 
 INDS = industries()
+
+
+def phrase(name):
+    """'E-commerce and D2C retail' -> 'e-commerce and D2C retail': lower-case ordinary words, keep acronyms."""
+    words = name.split(" (")[0].split()
+    return " ".join(w if any(c.isupper() for c in w[1:]) or w.isupper() else w.lower() for w in words)
+
+
+def with_article(np):
+    first = np.split()[0]
+    an = np[0].lower() in "aeio" or first in ("HR", "IT", "MSPs", "EV")
+    return ("an " if an else "a ") + np
+
+
+def asset(rel):
+    """Fingerprinted URL for long-lived caching: /assets/site.css?v=<hash of contents>."""
+    h = hashlib.sha256((PUB / rel.lstrip("/")).read_bytes()).hexdigest()[:10]
+    return f"{rel}?v={h}"
 
 
 def apply_link(label="Apply with micro1", cls="btn btn-sprout"):
@@ -90,19 +108,24 @@ def header():
 </header>'''
 
 
-FOOTER = f'''<footer>
+FOOTER_T = '''<footer>
   <div class="wrap">
     <a class="brand" href="/"><span>Dormant <b>Yield</b></span></a>
     <address class="owner">Kaada Nordic MarTech · Org. no. 936 289 835 (Norway) · <a href="mailto:contact@nordicmartech.com">contact@nordicmartech.com</a></address>
     <p>An independent referrer, not affiliated with, endorsed by or acting for micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. Companies pay us nothing.</p>
-    <p>General information, not legal, tax or insolvency advice. Partner criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed {REVIEWED}.</p>
+    <p>General information, not legal, tax or insolvency advice. Partner criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed REVIEWED_DATE.</p>
     <nav class="row foot-nav" aria-label="Footer"><a href="/industries">Industries</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
   </div>
 </footer>
-<script src="/assets/site.js" defer></script>'''
+<script src="{JS}" data-index="{IDX}" defer></script>'''
 
 
-def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/vault.webp"):
+def footer():
+    return (FOOTER_T.replace("REVIEWED_DATE", REVIEWED)
+            .replace("{JS}", asset("/assets/site.js")).replace("{IDX}", asset("/assets/index.json")))
+
+
+def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg"):
     url = SITE + ("/" if path == "" else "/" + path)
     ld = f'<script type="application/ld+json">\n{json.dumps(jsonld, ensure_ascii=False, indent=1)}\n</script>\n' if jsonld else ""
     can = f'<link rel="canonical" href="{url}">\n' if canonical else ""
@@ -120,20 +143,25 @@ def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{url}">
 <meta property="og:image" content="{SITE}{og_image}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Dormant Yield: records from closed and closing companies, licensed responsibly">
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0E4A3A">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preload" href="/fonts/plus-jakarta-sans-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="{asset('/assets/site.css')}">
 {ld}</head>
 <body>
 {header()}
 <main id="top">
 {body.strip()}
 </main>
-{FOOTER}
+{footer()}
 </body>
 </html>
 '''
@@ -207,7 +235,7 @@ def industry_pages():
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/industries">Industries</a> / <span>{e(i["name"])}</span></nav>
 <span class="eyebrow">{e(i["group"])}</span>
 <h1>{e(i["name"])}: records from closed and closing <em>companies</em></h1>
-<p class="lede">If you control the assets of a {e(i["name"].split(" (")[0].lower())} company in administration, liquidation or bankruptcy, its operational records may be licensable. Here is what usually exists, what needs care and how to check fit.</p>
+<p class="lede">If you control the assets of {e(with_article(phrase(i["name"])))} company in administration, liquidation or bankruptcy, its operational records may be licensable. Here is what usually exists, what needs care and how to check fit.</p>
 {why}
 </div></section>
 <section class="pt0"><div class="wrap two">
@@ -231,7 +259,7 @@ def industry_pages():
               crumbs(("Home", "/"), ("Industries", "/industries"), (i["name"], f'/industries/{i["slug"]}'))]}
         page(f'industries/{i["slug"]}', f'{i["name"]}: closed company records | Dormant Yield',
              f'{i["name"]} companies in administration, liquidation or bankruptcy: which operational records may be licensable to AI developers, what needs care, and micro1\'s published criteria.',
-             body, ld, og_image="/img/records.webp")
+             body, ld, og_image="/img/og.jpg")
 
     groups = sorted({i["group"] for i in INDS})
     def card(i):
@@ -255,7 +283,7 @@ def industry_pages():
           crumbs(("Home", "/"), ("Industries", "/industries"))]}
     page("industries", "Industries | Dormant Yield",
          "Guides for 50 industries: which records from closed and closing companies may be licensable, what needs care, and ten key niches.",
-         body, ld, og_image="/img/records.webp")
+         body, ld, og_image="/img/og.jpg")
 
 
 # ---------- text pages ----------
@@ -288,8 +316,8 @@ def index_and_sitemap():
 
 
 if __name__ == "__main__":
+    index_and_sitemap()
     home()
     industry_pages()
     text_pages()
-    index_and_sitemap()
     print(f"built: home, industries index, {len(INDS)} industry pages, text pages, index.json, sitemap.xml")

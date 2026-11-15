@@ -3,6 +3,8 @@
   // Locked micro1 link (Fred, in writing, 15 November 2026). Byte-exact. tests/check.mjs fails the build if it changes.
   var MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
   var EXT = ' <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span>';
+  var me = document.currentScript;
+  var IDX = (me && me.getAttribute("data-index")) || "/assets/index.json";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -28,7 +30,7 @@
   var index = null, loading = null;
   function loadIndex() {
     if (index) return Promise.resolve(index);
-    if (!loading) loading = fetch("/assets/index.json").then(function (r) { return r.json(); }).then(function (d) { index = d; return d; }).catch(function () { index = []; return index; });
+    if (!loading) loading = fetch(IDX).then(function (r) { return r.json(); }).then(function (d) { index = d; return d; }).catch(function () { index = []; return index; });
     return loading;
   }
   function score(item, terms) {
