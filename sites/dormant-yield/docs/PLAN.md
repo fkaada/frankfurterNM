@@ -1,6 +1,20 @@
 # Dormant Yield: research, recommendation and plan
 
-Prepared 15 November 2026. UK English. Status: **drafted → preview**. Nothing is published.
+Prepared 15 November 2026. UK English. **Approved by Fred 15 November 2026, with the edits in section 0.** Status: preview. Nothing is published.
+
+## 0. Edits from Fred's review (15 November 2026)
+
+1. "Independent referrer" everywhere; never "partner". The site says "not affiliated with micro1".
+2. No fee or deal amounts on any site or public document, and no anecdotes such as deal stories from community groups. The $ range was removed from the page, and the build fails on any amount.
+3. Fonts are self-hosted (DM Sans, Plus Jakarta Sans, OFL). Nothing loads from Google or any third party.
+4. Owner details are on every page: Kaada Nordic MarTech, org. no. 936 289 835, contact@nordicmartech.com. The site has Privacy and Legal pages.
+5. Every micro1 fact is marked `pending` until Fred click-checks it. Production deploys fail while any fact is pending.
+6. The US airline bankruptcy line is removed because it had no source.
+7. Closed firms: **officeholders only** (ruling Q14). Former directors are told to pass the page on and get no apply button.
+8. Framing: "a possible extra asset for creditors", with no pressure (Q33).
+9. Domains: dormantyield.com is the main site, dormantyield.co.uk redirects to it, and dormantyields.com is for outreach email only (web visitors are redirected). See `DEPLOY.md` and `OUTREACH-DOMAIN.md`.
+10. Hosting: Vercel Pro with DNS at GoDaddy and the Vercel Firewall. No cookies, and a strict security policy.
+11. Outreach follows the current rulings (send cap, follow-up sequence v2, country rules) rather than the generic advice in section 4.
 
 ## 1. micro1 referral terms: what we found
 
@@ -10,9 +24,9 @@ The session's network blocks micro1.ai, so these facts come from micro1's own pa
 |---|---|---|
 | micro1 runs a track for **defunct companies** ("no longer operating") | micro1.ai/company-referral | Search snippet, needs click-check |
 | Defunct track: **30+ employees** (one snippet also says "operations in 10+ countries", which is unclear) | micro1.ai/company-referral | Search snippet, needs click-check |
-| Company compensation **$100K–$3M+** for approved data packages | micro1.ai/company-referral | Search snippet, needs click-check |
-| Referrer reward for defunct deals: **$75K for deals up to $1M, or 7.5% of deal value above $1M** | micro1.ai/company-referral | Search snippet, needs click-check. **Not used on the site.** |
-| Operating-company referrals: "$50,000+" headline (creators page says $50–150K; an old forum post says up to $25K) | company-referral, creators, forum | Conflicting. Do not quote. |
+| Company compensation range for approved data packages | micro1.ai/company-referral | Search snippet. **Never quoted: no amounts on any site.** |
+| Referrer reward for defunct deals (fixed amount up to a deal size, then a percentage) | micro1.ai/company-referral | Search snippet. Internal only, never published. |
+| Operating-company referral headline differs across company-referral, creators and forum pages | company-referral, creators, forum | Conflicting. Do not quote. |
 | Sub-affiliate: extra 20% of approved company referral bonuses | micro1.ai/sub-affiliate | Search snippet. Not relevant to this MVP. |
 | Bonus not earned on registration, application or signature alone; paid after data transfer and approval, then a payout-approval process | company-referral, referral-terms | Search snippet |
 | Attribution: company must register through your link; attribution **cannot be changed retroactively** if it registered elsewhere first | company-referral | Search snippet |
@@ -33,12 +47,12 @@ Why:
 1. **The brand only makes sense for closed firms.** "Dormant" and "legacy records" sound wrong to a CEO whose company is trading. Adding operating firms would blur the message and set up a weaker copy of data.nordicmartech.com.
 2. **It avoids cannibalising your own site.** Two sites after the same operating-company audience would split links, search signals and trust. One site per audience lets both rank.
 3. **The audience is different and easier to find.** UK administrators and liquidators are listed by The Gazette and Companies House; US bankruptcy trustees are on public court rolls. That is a small, professional and findable audience that already sells assets for a living.
-4. **The economics look better, if confirmed.** The reported defunct-deal referral terms ($75K up to $1M, 7.5% above) are higher than the operating track's headline.
+4. **The economics look better, if confirmed.** The reported defunct-deal referral terms are higher than the operating track's headline.
 
 **One refinement that matters more than closed vs operating: aim at *closing* firms, not long-dead ones.**
 - **Best fit:** in administration, liquidation or Chapter 7/11, or a solvent wind-down. The records usually still exist, and someone clearly has authority to sell.
 - **Weak fit:** dissolved or struck off. In the UK, remaining property passes to the Crown as *bona vacantia* (Companies Act 2006, s.1012) until the company is restored. Records are often lost when software subscriptions lapse. The fit check warns about this rather than sending people to apply.
-- **US nuance:** a bankruptcy sale needs court approval, and where the privacy policy restricted transfers a consumer privacy ombudsman may be appointed (11 U.S.C. §§332, 363(b)(1)). Employee data draws objections: the Spirit Airlines union objection is the live example.
+- **US nuance:** a bankruptcy sale needs court approval, and where the privacy policy restricted transfers a consumer privacy ombudsman may be appointed (11 U.S.C. §§332, 363(b)(1)). Employee data draws objections in bankruptcy data sales.
 
 ## 3. Measuring it
 
@@ -92,7 +106,7 @@ Channel attribution without touching the link: clean landing paths such as `/l/l
 
 ## 6. Open items for Fred
 
-- [ ] Click-check micro1.ai/company-referral: defunct track, 30+ threshold, $100K–$3M+ range, "10+ countries" meaning.
+- [ ] Click-check micro1.ai/company-referral: defunct track, 30+ threshold, "10+ countries" meaning.
 - [ ] Click-test the locked micro1 company link with the code intact.
 - [ ] Confirm the company referral link is the right one for defunct companies (or whether micro1 issues a separate defunct link).
 - [ ] Read the full referral terms for ad, email and brand-bidding rules.
