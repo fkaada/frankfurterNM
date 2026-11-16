@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   // Locked micro1 link (Fred, in writing, 15 November 2026). Byte-exact. tests/check.mjs fails the build if it changes.
-  var MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
+  var MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
   var EXT = ' <span aria-hidden="true">↗</span><span class="sr"> (opens in a new tab)</span>';
   var me = document.currentScript;
   var IDX = (me && me.getAttribute("data-index")) || "/assets/index.json";
@@ -138,8 +138,8 @@
     var caps = [
       "Step 1 of 4. Confirm what records exist, in which systems and for which years, and get your authority to license them in writing.",
       "Step 2 of 4. Names, contact details and anything else that identifies a person are removed before anything moves. Employee and HR records need the most care.",
-      "Step 3 of 4. micro1 reviews a sample for fit and quality. micro1 says it reviews and approves the data within 30 days.",
-      "Step 4 of 4. micro1 decides what qualifies and a contract sets the terms. micro1 says it pays within 30 days of invoice. You can still walk away."
+      "Step 3 of 4. micro1 reviews a sample for fit and quality.",
+      "Step 4 of 4. micro1 decides what qualifies and a contract sets the terms. Timing is set by micro1's agreement. You can still walk away."
     ];
     function go(i) {
       cur = i;

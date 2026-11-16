@@ -19,7 +19,7 @@ def flag_pills(link=True):
     out = []
     for c, n, big, slug in B["COUNTRIES"]:
         href = f"/guides/{slug or GUIDE_SLUG[c]}"
-        inner = f'{flag(c)}<span>{e(n)}</span>' + ('<em>Main focus</em>' if big else "")
+        inner = f'{flag(c)}<span>{e(n)}</span>' + ('<span class="sr">, </span><em>Main focus</em>' if big else "")
         out.append(f'<li class="{"main" if big else ""}"><a href="{href}">{inner}</a></li>' if link else f"<li>{inner}</li>")
     return f'<ul class="pills">{"".join(out)}</ul>'
 
@@ -65,9 +65,9 @@ SIZES = {
 
 GUIDE_SLUG = {"in": "india", "sg": "singapore", "ie": "ireland", "nl": "netherlands", "de": "germany", "fr": "france"}
 LOCAL = {  # roles and laws to name for the six other countries; general information, take local advice
-    "in": dict(roles="insolvency and resolution professionals, and liquidators", law="Insolvency and Bankruptcy Code 2016", privacy="Digital Personal Data Protection Act 2023"),
+    "in": dict(roles="insolvency and resolution professionals, and liquidators", law="Insolvency and Bankruptcy Code 2016", privacy="Information Technology Act 2000, and the Digital Personal Data Protection Act 2023 as it comes into force (main duties from May 2027)"),
     "sg": dict(roles="judicial managers and liquidators", law="Insolvency, Restructuring and Dissolution Act 2018", privacy="Personal Data Protection Act 2012"),
-    "ie": dict(roles="liquidators and examiners", law="Companies Act 2014", privacy="GDPR and the Data Protection Act 2018"),
+    "ie": dict(roles="liquidators", law="Companies Act 2014", privacy="GDPR and the Data Protection Act 2018"),
     "nl": dict(roles="the curator (bankruptcy trustee)", law="Bankruptcy Act (Faillissementswet)", privacy="GDPR"),
     "de": dict(roles="the insolvency administrator (Insolvenzverwalter)", law="Insolvency Code (Insolvenzordnung)", privacy="GDPR and the Federal Data Protection Act (BDSG)"),
     "fr": dict(roles="the judicial liquidator (liquidateur judiciaire)", law="Commercial Code, Book VI", privacy="GDPR and the Loi Informatique et Libertés"),
@@ -84,7 +84,7 @@ def steps_html(steps):
 def guide_big(c, n, slug, size):
     R = B["RIGHTS"][c]; S = SIZES[size]; other = "enterprise" if size == "sme" else "sme"
     court = {"us": " In bankruptcy, a sale outside the ordinary course needs court approval.",
-             "ca": " In receiverships and CCAA proceedings, sales usually need court approval."}.get(c, "")
+             "ca": " In CCAA proceedings and court-appointed receiverships, sales need court approval."}.get(c, "")
     steps = [
         ("Confirm who can sign", e(R["control"][0]) + " Get the authority in writing before you speak to any buyer."),
         ("Check the company's status", e(R["register"]) + " " + e(R["dissolved"][0])),
@@ -93,7 +93,7 @@ def guide_big(c, n, slug, size):
          else "List the tools the company used, then export from each one while access still works. Check the records are in English."),
         ("Take people out", e(R["privacy"][0]) + " Employee and HR records are usually left out entirely."),
         ("Run the fit check, then apply", f"micro1 lists companies that are no longer operating, with 30+ peak employees and English records, in ten countries including {e(n)} {CHIP()}. Our fit check takes two minutes."),
-        ("Review, take advice, sign or walk away", "micro1 says it reviews and approves the data within 30 days, then pays within 30 days of invoice." + court + " Take advice on the contract; you can stop at any point before signing."),
+        ("Review, take advice, sign or walk away", "Timing is set by micro1's agreement. Check micro1's current terms." + court + " Take advice on the contract; you can stop at any point before signing."),
     ]
     tips = "".join(f"<li>{e(t)}</li>" for t in S["tips"])
     body = f'''<section class="ind-hero"><div class="wrap stack">
@@ -101,7 +101,7 @@ def guide_big(c, n, slug, size):
 <span class="eyebrow">{flag(c, 22, "fl inline")} {e(n)} · guide for {S["label"]}</span>
 <h1>{e(n)}: a step-by-step guide for <em>{S["label"]}</em></h1>
 <p class="lede">For companies with {S["range"]} that are in a formal insolvency process or have closed. Six steps, in order, from authority to a signed licence.</p>
-<div class="glance"><div><span>Who decides</span><strong>{e(R["roles"])}</strong></div><div><span>This guide</span><strong>{e(S["range"].capitalize())}</strong></div><div><span>micro1 timing</span><strong>Review within 30 days, pay within 30 days of invoice</strong></div><div><span>Cost to you</span><strong>Nothing from us</strong></div></div>
+<div class="glance"><div><span>Who decides</span><strong>{e(R["roles"])}</strong></div><div><span>This guide</span><strong>{e(S["range"].capitalize())}</strong></div><div><span>micro1 timing</span><strong>Set by micro1's agreement</strong></div><div><span>Cost to you</span><strong>Nothing from us</strong></div></div>
 <p class="small muted"><a href="/guides/{slug}/{other}">Read the {"enterprise" if other == "enterprise" else "SME"} guide instead →</a></p>
 </div></section>
 <section class="pt0"><div class="wrap stack">{steps_html(steps)}</div></section>
@@ -178,7 +178,7 @@ def guides():
         else:
             guide_local(c, n)
     big4 = "".join(
-        f'<li><div class="gc-top">{flag(c, 40)}<strong>{e(n)}</strong><em>Main focus</em></div>'
+        f'<li><div class="gc-top">{flag(c, 40)}<strong>{e(n)}</strong><span class="sr">, </span><em>Main focus</em></div>'
         f'<a href="/guides/{slug}/sme">SME guide <span aria-hidden="true">→</span></a><a href="/guides/{slug}/enterprise">Enterprise guide <span aria-hidden="true">→</span></a>'
         f'<a class="muted" href="/countries/{slug}">Rights guide</a></li>'
         for c, n, big, slug in B["COUNTRIES"] if big)

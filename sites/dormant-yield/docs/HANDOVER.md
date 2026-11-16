@@ -13,7 +13,7 @@
   - 50 industry pages: 30 listed, 10 of them key niches
   - 8 insight articles
   - readiness checklist, glossary, FAQ, about, privacy, legal, 404
-- **The one micro1 link** (locked by Fred, 15 Nov): `https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0`
+- **The one micro1 link** (locked by Fred, 16 Nov 11:24): `https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0`
 - **Quality at handover:**
   - Lighthouse (phone): performance 96–99; accessibility, best practices and SEO 100.
   - axe: 0 violations.
@@ -41,7 +41,7 @@ node scripts/og.js                # share cards (only when titles change; needs 
 node tests/check.mjs --launch     # the gate: must say ok
 ```
 
-**Deploy:** commit and push. Until GitHub is connected to Vercel, set `SHA=` in `scripts/deploy.sh` to the new commit, redeploy, then assign the custom domains to the new deployment (see docs/DEPLOY.md, "Known trap"). After any deploy, run `node scripts/live-check.mjs`; its Release check catches a stale domain.
+**Deploy:** open a pull request into `main`. Vercel builds a preview; merging to `main` deploys to production automatically (GitHub connected 16 Nov). After it is live, run `node scripts/live-check.mjs` from `main`. Never re-point the domains to a branch build (see docs/DEPLOY.md).
 
 ## Rules the gate enforces (the build fails if broken)
 - The micro1 link is byte-exact everywhere, and every page with it carries the "Referral link" disclosure.

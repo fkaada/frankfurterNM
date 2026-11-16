@@ -15,9 +15,9 @@ import v4  # noqa: E402
 
 SITE = "https://dormantyield.com"
 # Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Byte-exact. Never edit.
-MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0"
+MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0"
 REVIEWED = "15 November 2026"
-LASTMOD = "2026-11-15"
+LASTMOD = "2026-11-16"
 
 COUNTRIES = [  # micro1 defunct-company track, company.micro1.ai/get-started, checked 15 November 2026
     # (code, name, big four, page slug)
@@ -45,17 +45,17 @@ RIGHTS = {
                  "In an assignment for the benefit of creditors, the assignee holds the assets under state law."],
         dissolved=["Outside bankruptcy, state law on dissolved corporations decides who can still act for the company and for how long.",
                    "If the company went through bankruptcy, check whether the records were sold with the business assets."],
-        privacy=["If the company's privacy policy restricted transfers of personal information, the court may appoint a consumer privacy ombudsman before a sale (11 U.S.C. §§332, 363(b)(1)).",
+        privacy=["If the company's privacy policy barred transfers of personal information, that information can only be sold in line with the policy, or with court approval after a consumer privacy ombudsman has been appointed (11 U.S.C. §§332, 363(b)(1)).",
                  "State privacy laws and contracts with customers can still apply to personal data in the records."],
         register="Court dockets (PACER) show trustee appointments and sale orders; state registries show dissolution."),
     "ca": dict(
         roles="Licensed insolvency trustees, receivers and court-appointed monitors",
         control=["In bankruptcy, the licensed insolvency trustee holds and realises the company's property (Bankruptcy and Insolvency Act).",
-                 "In receiverships and CCAA restructurings, asset sales usually need court approval (Companies' Creditors Arrangement Act, s.36)."],
+                 "In a CCAA restructuring, sales outside the ordinary course need court approval (Companies' Creditors Arrangement Act, s.36). A court-appointed receiver usually needs the court to approve a sale too (Bankruptcy and Insolvency Act, s.243)."],
         dissolved=["When a federal corporation is dissolved, property it had not disposed of generally vests in the Crown (Canada Business Corporations Act, s.228). Provincial laws are similar.",
                    "Revival of the corporation may be possible before anything can be licensed."],
         privacy=["PIPEDA, and provincial laws in Quebec, British Columbia and Alberta, continue to apply to personal information in the records.",
-                 "PIPEDA allows limited sharing for business transactions only under conditions (s.7.2), so take advice before any sample leaves your hands."],
+                 "PIPEDA allows sharing in a business transaction without consent only under a written agreement, and not where the main purpose of the deal is the personal information itself (s.7.2). Remove or de-identify it and take advice before any sample leaves your hands."],
         register="The Office of the Superintendent of Bankruptcy lists insolvency records; Corporations Canada and provincial registries show status."),
     "au": dict(
         roles="Liquidators, voluntary administrators and receivers (registered liquidators)",
@@ -155,7 +155,7 @@ def header():
     return f'''<a class="skip" href="#top">Skip to content</a>
 <div class="masthead">
 <aside class="disclose" aria-label="Referral disclosure">
-  <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a qualifying deal completes through our link, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">Independent referrer: we may earn a fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
+  <div class="wrap"><span class="badge">Independent referrer</span><span class="sr">. </span><span class="d-long">Not affiliated with micro1. If a qualifying deal completes through our link, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">Independent referrer: we may earn a fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
 </aside>
 <header class="top">
   <div class="wrap">
@@ -285,7 +285,7 @@ FAQ = [
     ("Will you see our records?", "No. Records go only to the buyer, under its own agreement, after you have signed. Never send records to us or to anyone who asks for them before a contract."),
     ("The company was struck off years ago. Can I still do this?", "In the UK, a dissolved company's property generally passes to the Crown until the company is restored to the register, so nobody can usually license its records directly. Restoration is possible in some cases; speak to a solicitor first. In the US it depends on state law and whether the company went through bankruptcy."),
     ("What about employee data?", "Employee and HR records are the most sensitive part of company data. Expect them to be excluded or properly de-identified, and check whether consent or notice is needed before anything is shared."),
-    ("How long does it take?", "micro1 says it reviews and approves the data within 30 days, then pays within 30 days of invoice. Confirming who holds the rights can take longer than either."),
+    ("How long does it take?", "Timing is set by micro1's agreement. Check micro1's current terms. Confirming who holds the rights can take time too."),
     ("I was a director, not the officeholder. Can I apply?", "Usually not. While a company is in administration, liquidation or bankruptcy, the officeholder controls its assets. Pass this page to them."),
     ("Which countries are covered?", "micro1's defunct-company track lists companies based in the United States, the United Kingdom, Canada, India, Australia, Singapore, Ireland, the Netherlands, Germany and France. Our rights guides cover the big four in detail: the UK, the US, Canada and Australia. Elsewhere, take local advice."),
     ("Does this work in Canada?", "Yes, micro1 lists Canada. In a bankruptcy the licensed insolvency trustee usually decides; a dissolved federal corporation's remaining property generally vests in the Crown until it is revived. See our Canada guide at dormantyield.com/countries/canada."),
@@ -299,7 +299,7 @@ FAQ = [
 def fill(body):
     """Shared placeholders for content pages."""
     big = "".join(
-        f'<li class="main"><a href="/countries/{slug}"><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span><em>Main focus</em></a></li>'
+        f'<li class="main"><a href="/countries/{slug}"><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span><span class="sr">, </span><em>Main focus</em></a></li>'
         for c, n, _, slug in BIG4)
     rest = "".join(f'<li><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span></li>' for c, n, b, _ in COUNTRIES if not b)
     rights4 = "".join(
@@ -332,7 +332,7 @@ def home():
         ORG,
         {"@type": "WebSite", "@id": SITE + "/#site", "url": SITE + "/", "name": "Dormant Yield", "inLanguage": "en-GB", "publisher": {"@id": SITE + "/#org"}},
     ]}
-    page("", "Dormant Yield",
+    page("", "Dormant Yield: Company Records as an Asset for Creditors",
          "For officeholders of closed and closing companies in the UK, US, Canada and Australia: how licensing business records works and where to apply.",
          fill((ROOT / "content/home.html").read_text()), ld,
          head_extra='<link rel="preload" as="image" href="/img/vault.webp" imagesrcset="/img/vault-400.webp 400w, /img/vault-560.webp 560w, /img/vault-720.webp 720w, /img/vault.webp 900w" imagesizes="(max-width: 860px) 92vw, 460px" fetchpriority="high">\n')

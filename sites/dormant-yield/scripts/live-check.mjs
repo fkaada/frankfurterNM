@@ -4,7 +4,7 @@
 // Checks: HTTPS and status of every sitemap URL, security headers, the locked micro1 link on every page,
 // share images, and the redirects from www, .co.uk and the outreach domain.
 const BASE = (process.argv[2] || "https://dormantyield.com").replace(/\/$/, "");
-const MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
+const MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
 const HEADERS = ["content-security-policy", "strict-transport-security", "x-content-type-options", "x-frame-options", "referrer-policy", "permissions-policy"];
 const problems = [];
 const ok = (m) => console.log("  ok   " + m);

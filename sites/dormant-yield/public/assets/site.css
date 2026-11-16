@@ -636,3 +636,4 @@ aside.disclose{display:block}
 .teaser .u{text-decoration:underline}
 a.gl{text-decoration:underline dotted;text-underline-offset:3px;color:inherit}
 a.gl:hover{color:var(--sprout-ink)}
+.photo-fig{max-width:780px;margin:8px 0 4px;display:flex;flex-direction:column;gap:6px}.photo-fig img{width:100%;height:auto;display:block}.photo-fig figcaption{margin:0}

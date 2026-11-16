@@ -1,34 +1,11 @@
 # Hosting, domains and launch
 
-## Status, 16 November 2026 (release f3ae94d, v7): LIVE on dormantyield.com
-DNS switched by Fred on 16 Nov. All six domains verified in Vercel. dormantyield.co.uk, www and dormantyields.com redirect (308) to dormantyield.com.
-
-**Known trap (found 16 Nov):** API deployments with `target: production` updated the vercel.app alias but left the custom domains on an older deployment (dpl_BZu5…), so dormantyield.com served v6 while the preview showed v7. Until GitHub is connected, after every deploy:
-1. Assign `dormantyield.com`, `dormantyield.co.uk` and `dormant-yield.vercel.app` to the new deployment (Vercel → Deployments → the new one → Promote, or ask Claude).
-2. Run `node scripts/live-check.mjs`: its Release check fails if the live site differs from this checkout.
-
-- **Vercel project:** `dormant-yield` in team Nordic MarTech (`prj_1tqOBfFP28DV7CE2L967uOaqeFGL`). Production: https://dormant-yield-nordic-mar-tech.vercel.app (served, launch gate passed: 93 pages, 81 partner links, locked link intact; stress test 276 page loads at 360/768/1280 px, 0 failures).
-- **Domains added to the project:** dormantyield.com, www.dormantyield.com, dormantyield.co.uk, www.dormantyield.co.uk, dormantyields.com, www.dormantyields.com. All six still point at GoDaddy parking (3.33.130.190, 15.197.148.33).
-- **How it deploys today:** GitHub is not connected to Vercel ("add a Login Connection to your GitHub account"), so production uses `scripts/deploy.sh`: it fetches this repo at a pinned commit and runs the launch gate. Connect GitHub (Vercel → Account Settings → Authentication → GitHub, then Project → Settings → Git → connect `fkaada/frankfurterNM`, root directory `sites/dormant-yield`, build command `node tests/check.mjs`) and pushes deploy automatically.
-- **Firewall:** the Vercel connection used here was refused access to the firewall API. Apply section 4 in the dashboard (Project → Firewall), or reconnect the Vercel integration with firewall access and ask Claude again.
-
-### After DNS: run `node scripts/live-check.mjs` (checks HTTPS, redirects, every page, headers, every micro1 link, share images)
-
-### Exact GoDaddy records (values Vercel recommends for this project)
-
-For each of dormantyield.com, dormantyield.co.uk and dormantyields.com:
-
-| Type | Name | Value |
-|---|---|---|
-| A | @ | 216.198.79.1 |
-| A | @ | 64.29.17.1 |
-| CNAME | www | a0817a7103b70c8a.vercel-dns-017.com |
-
-Delete the existing parking A records (3.33.130.190 and 15.197.148.33) and any GoDaddy forwarding first. The older values (76.76.21.21 and cname.vercel-dns.com) also still work.
-
-
-Decided 15 November 2026. Status: **preview**. Nothing goes live without Fred's written "publish".
-
+## Status, 16 November 2026: LIVE on dormantyield.com, deployed from `main`
+- DNS switched 15-16 Nov. All six domains verified; .co.uk, www and dormantyields.com redirect (308) to dormantyield.com.
+- GitHub is connected (16 Nov): every merge to `main` builds with `node tests/check.mjs` and is promoted to production automatically. **`main` is the only route to production.**
+- `scripts/deploy.sh` (pinned tarball) is a fallback for preview builds only. Never move the custom domains onto a deployment built from another branch: on 16 Nov this briefly put an older micro1 link on dormantyield.com (about 3 minutes, reverted).
+- To ship work from a feature branch: open a pull request into `main`; Vercel builds a preview for the PR; merge when the preview passes.
+- After any production deploy, run `node scripts/live-check.mjs` from an up-to-date `main` checkout. Its Release check fails if the live site differs from that build.
 ## 1. Hosting decision: Vercel Pro, DNS stays at GoDaddy
 
 | Option | Verdict |
