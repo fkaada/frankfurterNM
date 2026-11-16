@@ -93,7 +93,7 @@ def guide_big(c, n, slug, size):
          else "List the tools the company used, then export from each one while access still works. Check the records are in English."),
         ("Take people out", e(R["privacy"][0]) + " Employee and HR records are usually left out entirely."),
         ("Run the fit check, then apply", f"micro1 lists companies that are no longer operating, with 30+ peak employees and English records, in ten countries including {e(n)} {CHIP()}. Our fit check takes two minutes."),
-        ("Review, take advice, sign or walk away", "micro1 says it reviews and approves the data within 30 days, then pays within 30 days of invoice." + court + " Take advice on the contract; you can stop at any point before signing."),
+        ("Review, take advice, sign or walk away", "Timing is set by micro1's agreement. Check micro1's current terms." + court + " Take advice on the contract; you can stop at any point before signing."),
     ]
     tips = "".join(f"<li>{e(t)}</li>" for t in S["tips"])
     body = f'''<section class="ind-hero"><div class="wrap stack">
@@ -101,7 +101,7 @@ def guide_big(c, n, slug, size):
 <span class="eyebrow">{flag(c, 22, "fl inline")} {e(n)} · guide for {S["label"]}</span>
 <h1>{e(n)}: a step-by-step guide for <em>{S["label"]}</em></h1>
 <p class="lede">For companies with {S["range"]} that are in a formal insolvency process or have closed. Six steps, in order, from authority to a signed licence.</p>
-<div class="glance"><div><span>Who decides</span><strong>{e(R["roles"])}</strong></div><div><span>This guide</span><strong>{e(S["range"].capitalize())}</strong></div><div><span>micro1 timing</span><strong>Review within 30 days, pay within 30 days of invoice</strong></div><div><span>Cost to you</span><strong>Nothing from us</strong></div></div>
+<div class="glance"><div><span>Who decides</span><strong>{e(R["roles"])}</strong></div><div><span>This guide</span><strong>{e(S["range"].capitalize())}</strong></div><div><span>micro1 timing</span><strong>Set by micro1's agreement</strong></div><div><span>Cost to you</span><strong>Nothing from us</strong></div></div>
 <p class="small muted"><a href="/guides/{slug}/{other}">Read the {"enterprise" if other == "enterprise" else "SME"} guide instead →</a></p>
 </div></section>
 <section class="pt0"><div class="wrap stack">{steps_html(steps)}</div></section>

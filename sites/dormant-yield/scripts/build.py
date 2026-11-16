@@ -15,7 +15,7 @@ import v4  # noqa: E402
 
 SITE = "https://dormantyield.com"
 # Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Byte-exact. Never edit.
-MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0"
+MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0"
 REVIEWED = "15 November 2026"
 LASTMOD = "2026-11-16"
 
@@ -267,7 +267,7 @@ FAQ = [
     ("Will you see our records?", "No. Records go only to the buyer, under its own agreement, after you have signed. Never send records to us or to anyone who asks for them before a contract."),
     ("The company was struck off years ago. Can I still do this?", "In the UK, a dissolved company's property generally passes to the Crown until the company is restored to the register, so nobody can usually license its records directly. Restoration is possible in some cases; speak to a solicitor first. In the US it depends on state law and whether the company went through bankruptcy."),
     ("What about employee data?", "Employee and HR records are the most sensitive part of company data. Expect them to be excluded or properly de-identified, and check whether consent or notice is needed before anything is shared."),
-    ("How long does it take?", "micro1 says it reviews and approves the data within 30 days, then pays within 30 days of invoice. Confirming who holds the rights can take longer than either."),
+    ("How long does it take?", "Timing is set by micro1's agreement. Check micro1's current terms. Confirming who holds the rights can take time too."),
     ("I was a director, not the officeholder. Can I apply?", "Usually not. While a company is in administration, liquidation or bankruptcy, the officeholder controls its assets. Pass this page to them."),
     ("Which countries are covered?", "micro1's defunct-company track lists companies based in the United States, the United Kingdom, Canada, India, Australia, Singapore, Ireland, the Netherlands, Germany and France. Our rights guides cover the big four in detail: the UK, the US, Canada and Australia. Elsewhere, take local advice."),
     ("Does this work in Canada?", "Yes, micro1 lists Canada. In a bankruptcy the licensed insolvency trustee usually decides; a dissolved federal corporation's remaining property generally vests in the Crown until it is revived. See our Canada guide at dormantyield.com/countries/canada."),
