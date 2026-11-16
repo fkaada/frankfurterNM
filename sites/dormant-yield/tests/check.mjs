@@ -10,7 +10,7 @@ const pub = join(root, "public");
 const LAUNCH = process.argv.includes("--launch") || process.env.VERCEL_ENV === "production";
 
 // Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Never edit without his written instruction.
-const MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
+const MICRO1 = "https://company.micro1.ai/register/?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0";
 
 const OWNER = ["Kaada Nordic MarTech", "936 289 835", "contact@nordicmartech.com"];
 
@@ -34,6 +34,7 @@ const BANNED = [
   [/spirit airlines|airline/i, "unsourced airline claim removed (15 November 2026)"],
   [/fonts\.(googleapis|gstatic)\.com/i, "fonts must be self-hosted"],
   [/lovable/i, "no platform leaks"],
+  [/within 30 days|of invoice/i, "no payment-timing claims (DY build v2, 16 November 2026)"],
 ];
 
 const errors = [];
