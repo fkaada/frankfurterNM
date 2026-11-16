@@ -65,9 +65,9 @@ SIZES = {
 
 GUIDE_SLUG = {"in": "india", "sg": "singapore", "ie": "ireland", "nl": "netherlands", "de": "germany", "fr": "france"}
 LOCAL = {  # roles and laws to name for the six other countries; general information, take local advice
-    "in": dict(roles="insolvency and resolution professionals, and liquidators", law="Insolvency and Bankruptcy Code 2016", privacy="Digital Personal Data Protection Act 2023"),
+    "in": dict(roles="insolvency and resolution professionals, and liquidators", law="Insolvency and Bankruptcy Code 2016", privacy="Information Technology Act 2000, and the Digital Personal Data Protection Act 2023 as it comes into force (main duties from May 2027)"),
     "sg": dict(roles="judicial managers and liquidators", law="Insolvency, Restructuring and Dissolution Act 2018", privacy="Personal Data Protection Act 2012"),
-    "ie": dict(roles="liquidators and examiners", law="Companies Act 2014", privacy="GDPR and the Data Protection Act 2018"),
+    "ie": dict(roles="liquidators", law="Companies Act 2014", privacy="GDPR and the Data Protection Act 2018"),
     "nl": dict(roles="the curator (bankruptcy trustee)", law="Bankruptcy Act (Faillissementswet)", privacy="GDPR"),
     "de": dict(roles="the insolvency administrator (Insolvenzverwalter)", law="Insolvency Code (Insolvenzordnung)", privacy="GDPR and the Federal Data Protection Act (BDSG)"),
     "fr": dict(roles="the judicial liquidator (liquidateur judiciaire)", law="Commercial Code, Book VI", privacy="GDPR and the Loi Informatique et Libertés"),
@@ -84,7 +84,7 @@ def steps_html(steps):
 def guide_big(c, n, slug, size):
     R = B["RIGHTS"][c]; S = SIZES[size]; other = "enterprise" if size == "sme" else "sme"
     court = {"us": " In bankruptcy, a sale outside the ordinary course needs court approval.",
-             "ca": " In receiverships and CCAA proceedings, sales usually need court approval."}.get(c, "")
+             "ca": " In CCAA proceedings and court-appointed receiverships, sales need court approval."}.get(c, "")
     steps = [
         ("Confirm who can sign", e(R["control"][0]) + " Get the authority in writing before you speak to any buyer."),
         ("Check the company's status", e(R["register"]) + " " + e(R["dissolved"][0])),
