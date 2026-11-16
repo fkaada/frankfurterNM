@@ -590,3 +590,4 @@ aside.disclose{display:block}
 .chip{min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:600 .9rem var(--body);cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--on-forest)}
 @media (max-width:860px){.hv .cover{display:none}.dr-front{height:70px}.dr-plate{top:12px}.dr-pull{bottom:12px}.hv{margin-top:-6px}}
+.photo-fig{max-width:780px;margin:8px 0 4px;display:flex;flex-direction:column;gap:6px}.photo-fig img{width:100%;height:auto;display:block}.photo-fig figcaption{margin:0}
