@@ -242,6 +242,22 @@ def readiness():
               "Twenty checks for officeholders before licensing a closed company's records: authority, records, personal data, contracts and decision.", body, ld)
 
 
+
+def related(p, posts):
+    """Related reading: the country's guides, then other articles (same country first). Gives every article more than one inbound link."""
+    c = p.get("country", ""); items = []
+    big = {code: (name, slug) for code, name, b, slug in B["COUNTRIES"] if b}
+    if c in big:
+        n, slug = big[c]
+        items += [(f"/countries/{slug}", f"{n}: who holds the rights"), (f"/guides/{slug}/sme", f"{n}: SME guide"),
+                  (f"/guides/{slug}/enterprise", f"{n}: enterprise guide")]
+    others = sorted((q for q in posts if q["slug"] != p["slug"]), key=lambda q: (q.get("country") != c, q["slug"]))[:3]
+    items += [(f'/blog/{q["slug"]}', q["h1"]) for q in others]
+    items += [("/glossary", "Glossary: insolvency and data terms in plain English")]
+    lis = "".join(f'<li><a href="{u}">{e(t)}</a></li>' for u, t in items)
+    return f'<section class="pt0"><div class="wrap narrow-col"><h2 class="h3">Related reading</h2><ul class="related">{lis}</ul></div></section>'
+
+
 # ---------- blog ----------
 def blog():
     posts = []
@@ -261,6 +277,7 @@ def blog():
 <p class="byline">Dormant Yield editorial · {e(p["display_date"])} · General information, not legal advice</p>
 </div></section>
 <section class="pt0"><div class="wrap narrow-col prose">{B["fill"](p["body"])}</div></section></article>
+{related(p, posts)}
 <section class="pt0"><div class="wrap">{cta_band()}</div></section>
 {next_cards("ready", "guides", "fit", title="Keep going")}'''
         ld = {"@context": "https://schema.org", "@graph": [B["ORG"],
@@ -333,3 +350,35 @@ def og_job(slug, kind, **kw):
     """Queue a share card for scripts/og.js and return its path."""
     OG_JOBS.append(dict(slug=slug, kind=kind, **kw))
     return f"/img/og/{slug}.jpg"
+
+
+# ---------- v7: content-built diagrams (HTML and CSS, crisp at any size, both themes) ----------
+ARROW = '<svg class="dg-arrow" viewBox="0 0 40 16" aria-hidden="true"><path d="M2 8h32M28 3l6 5-6 5"/></svg>'
+
+
+def sieve():
+    kept = ["Support tickets and how they were solved", "Project and task histories", "Internal guides and wikis",
+            "Sales pipeline activity", "Team chat and email about the work"]
+    out = ["Names and contact details", "HR and payroll files", "Card and bank details", "Health, children's or biometric data",
+           "Privileged or client-confidential material"]
+    li = lambda xs: "".join(f"<li>{e(x)}</li>" for x in xs)
+    return (f'<figure class="sieve" aria-label="What goes in, what is taken out, what is licensed">'
+            f'<div class="sv-col sv-in"><p class="sv-h"><span class="sv-n">1</span>What the company left behind</p><ul>{li(kept)}</ul></div>{ARROW}'
+            f'<div class="sv-col sv-gate"><p class="sv-h"><span class="sv-n">2</span>Taken out first</p><ul class="sv-out">{li(out)}</ul></div>{ARROW}'
+            f'<div class="sv-col sv-res"><p class="sv-h"><span class="sv-n">3</span>What an AI developer licenses</p>'
+            f'<p class="sv-big">Patterns, not people.</p><p>How problems were solved, how projects ran and how teams worked, '
+            f'used on the terms of a signed licence.</p></div>'
+            f'<figcaption>Illustration of the usual approach. What is removed and how is set with your advisers and micro1\'s contract.</figcaption></figure>')
+
+
+def flow():
+    node = lambda cls, t, d: f'<div class="f-node {cls}"><b>{e(t)}</b><span>{e(d)}</span></div>'
+    link = lambda *xs: (f'<div class="f-link{" two-way" if len(xs) > 1 else ""}">' + f"<span>{e(xs[0])}</span>" + ARROW
+                        + (ARROW.replace('class="dg-arrow"', 'class="dg-arrow back"') + f"<span>{e(xs[1])}</span>" if len(xs) > 1 else "") + "</div>")
+    return ('<figure class="flow3" aria-label="Who gains, and how money moves">'
+            + node("f-co", "Company and creditors", "Control the records through the officeholder.")
+            + link("Records, with people taken out", "A possible extra asset, on micro1's terms")
+            + node("f-m1", "micro1", "Reviews a sample, decides, and pays under its own contract.")
+            + link("A referral fee, only if a qualifying deal completes")
+            + node("f-dy", "Dormant Yield", "Points you to micro1 and explains the steps. Charges you nothing.")
+            + '</figure>')

@@ -137,7 +137,7 @@
       bar = m.querySelector(".m-bar span"), play = m.querySelector(".m-play"), timer = null, cur = 0;
     var caps = [
       "Step 1 of 4. Confirm what records exist, in which systems and for which years, and get your authority to license them in writing.",
-      "Step 2 of 4. Personal data is removed or de-identified before anything moves. Employee and HR records need the most care.",
+      "Step 2 of 4. Names, contact details and anything else that identifies a person are removed before anything moves. Employee and HR records need the most care.",
       "Step 3 of 4. micro1 reviews a sample for fit and quality.",
       "Step 4 of 4. micro1 decides what qualifies and a contract sets the terms. Timing is set by micro1's agreement. You can still walk away."
     ];

@@ -4,7 +4,7 @@ Run from sites/dormant-yield:  python3 scripts/build.py
 Writes public/*.html, public/industries/*.html, public/assets/index.json and public/sitemap.xml.
 Generated files are committed, so Vercel only serves public/ and runs tests/check.mjs.
 """
-import hashlib, html, json, pathlib, sys
+import hashlib, html, json, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUB = ROOT / "public"
@@ -132,11 +132,12 @@ def header():
     flag = lambda c: f'<img class="fl" src="/img/flags/{c}.svg" width="24" height="24" alt="">'
     big = "".join(f'<li><a href="/guides/{slug}">{flag(c)}<strong>{e(n)}</strong><span>SME and enterprise guides</span></a></li>' for c, n, _, slug in BIG4)
     rest = "".join(f'<li><a href="/guides/{v4.GUIDE_SLUG[c]}">{flag(c)}{e(n)}</a></li>' for c, n, b, _ in COUNTRIES if not b)
-    guides = ('<li><a href="/guides"><strong>Country guides</strong><span>SMEs and enterprises, ten countries</span></a></li>'
-              '<li><a href="/how-it-works"><strong>How it works</strong><span>Four steps, what to prepare</span></a></li>'
+    guides = ('<li><a href="/how-it-works"><strong>How it works</strong><span>Four steps, and what to prepare</span></a></li>'
               '<li><a href="/tools/readiness"><strong>Readiness checklist</strong><span>Twenty checks, tick and copy</span></a></li>'
+              '<li><a href="/guides"><strong>Country guides</strong><span>Step by step, for SMEs and enterprises</span></a></li>'
               '<li><a href="/officeholders"><strong>For officeholders</strong><span>Administrators, liquidators, trustees</span></a></li>'
-              '<li><a href="/blog"><strong>Insights</strong><span>Bona vacantia, ABCs, 363 sales and more</span></a></li>'
+              '<li><a href="/glossary"><strong>Glossary</strong><span>Insolvency and data terms, in plain English</span></a></li>'
+              '<li><a href="/blog"><strong>Insights</strong><span>What happens to records when a company closes</span></a></li>'
               '<li><a href="/faq"><strong>FAQ</strong><span>Fees, records, employees, timing</span></a></li>'
               '<li><a href="/about"><strong>About us</strong><span>Who we are and how we are paid</span></a></li>')
     search = lambda sid: (f'<div class="mega-search"><label for="q-{sid}">Search 50 industries and all pages</label>'
@@ -164,8 +165,8 @@ def header():
     </a>
     <nav class="nav-d" aria-label="Main">
       <a href="/how-it-works">How it works</a>
-      <details class="mega" data-mega><summary>Industries</summary><div class="mega-panel wide">{ind_panel}</div></details>
       <details class="mega" data-mega><summary>Countries</summary><div class="mega-panel">{cty_panel}</div></details>
+      <details class="mega" data-mega><summary>Industries</summary><div class="mega-panel wide">{ind_panel}</div></details>
       <details class="mega" data-mega><summary>Guides</summary><div class="mega-panel narrow">{gd_panel}</div></details>
     </nav>
     <div class="hdr-end">
@@ -174,8 +175,8 @@ def header():
         <summary aria-label="Menu"><span class="burger" aria-hidden="true"><i></i><i></i><i></i></span><span class="m-label">Menu</span></summary>
         <div class="mega-panel sheet">
           {search("m")}
-          <details class="acc"><summary>Industries</summary><div class="acc-body">{ind_inner}</div></details>
           <details class="acc"><summary>Countries</summary><div class="acc-body">{cty_panel}</div></details>
+          <details class="acc"><summary>Industries</summary><div class="acc-body">{ind_inner}</div></details>
           <details class="acc" open><summary>Guides</summary><div class="acc-body">{gd_panel}</div></details>
         </div>
       </details>
@@ -191,7 +192,7 @@ FOOTER_T = '''<footer>
     <address class="owner">Kaada Nordic MarTech · Org. no. 936 289 835 (Norway) · <a href="mailto:contact@nordicmartech.com">contact@nordicmartech.com</a></address>
     <p>An independent referrer, not affiliated with, endorsed by or acting for micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. Companies pay us nothing.</p>
     <p>General information, not legal, tax or insolvency advice. Partner criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed REVIEWED_DATE.</p>
-    <nav class="row foot-nav" aria-label="Footer"><a href="/guides">Country guides</a><a href="/blog">Insights</a><a href="/tools/readiness">Readiness checklist</a><a href="/how-it-works">How it works</a><a href="/officeholders">For officeholders</a><a href="/industries">Industries</a><a href="/countries">Countries</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
+    <nav class="row foot-nav" aria-label="Footer"><a href="/guides">Country guides</a><a href="/blog">Insights</a><a href="/tools/readiness">Readiness checklist</a><a href="/how-it-works">How it works</a><a href="/glossary">Glossary</a><a href="/officeholders">For officeholders</a><a href="/industries">Industries</a><a href="/countries">Countries</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
   </div>
 </footer>
 <script src="{JS}" data-index="{IDX}" defer></script>'''
@@ -202,7 +203,24 @@ def footer():
             .replace("{JS}", asset("/assets/site.js")).replace("{IDX}", asset("/assets/index.json")))
 
 
+GLOSS_LINKS = [("de-identified", "de-identification"), ("de-identification", "de-identification"), ("bona vacantia", "bona-vacantia"),
+               ("officeholder", "officeholder"), ("assignment for the benefit of creditors", "abc"), ("pre-pack", "pre-pack"),
+               ("section 363", "section-363"), ("restoration", "restoration"), ("deregistration", "deregistration")]
+
+
+def gloss_link(body):
+    """Link the first plain-text use of each domain term to the glossary, so pages stay expert but readable."""
+    for term, anchor in GLOSS_LINKS:
+        if f"/glossary#{anchor}" in body:
+            continue
+        rx = re.compile(r"(<(?:p|li)(?: [^>]*)?>[^<]*?)\b(" + re.escape(term) + r")\b", re.I)
+        body = rx.sub(lambda m: f'{m.group(1)}<a class="gl" href="/glossary#{anchor}">{m.group(2)}</a>', body, count=1)
+    return body
+
+
 def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None, head_extra=""):
+    if path not in ("glossary", "404", "privacy", "legal"):
+        body = gloss_link(body)
     if visual:
         body = v4.with_visual(body, visual)
     url = SITE + ("/" if path == "" else "/" + path)
@@ -297,7 +315,7 @@ def fill(body):
         for c, n, _, _ in COUNTRIES) + '<label><input type="radio" name="country" id="c-other" value="other"><span>Elsewhere</span></label>'
     faq_short = "".join(f'<details><summary>{e(q)}</summary><p>{a}</p></details>' for q, a in faq_html()[:6])
     body = (body.replace("{{PILLS}}", v4.flag_pills()).replace("{{FLAGS}}", big + rest).replace("{{RIGHTS4}}", rights4).replace("{{NICHES}}", niches)
-            .replace("{{COUNTRY_OPTS}}", opts_c).replace("{{FAQ}}", faq_short).replace("{{APPLY}}", apply_link())
+            .replace("{{COUNTRY_OPTS}}", opts_c).replace("{{FAQ}}", faq_short).replace("{{APPLY}}", apply_link()).replace("{{SIEVE}}", v4.sieve()).replace("{{FLOW}}", v4.flow())
             .replace("{{CHIP_GS}}", chip("company.micro1.ai/get-started", "15 Nov 2026"))
             .replace("{{CHIP_DATA}}", chip("micro1.ai/data", "10 Nov 2026")))
     assert "{{" not in body, "unfilled placeholder"
@@ -476,7 +494,13 @@ def text_pages():
         meta, body = f.read_text().split("\n---\n", 1)
         m = dict(l.split(": ", 1) for l in meta.strip().splitlines())
         wrapcls = m.get("wrap", "wrap doc stack")
-        page(f.stem, m["title"], m["description"], fill(f'<section><div class="{wrapcls}">{body}</div></section>'),
+        ld = None
+        if f.stem == "glossary":
+            terms = re.findall(r'<dt id="([^"]+)">(.*?)</dt>\s*<dd>(.*?)</dd>', body, re.S)
+            ld = {"@context": "https://schema.org", "@type": "DefinedTermSet", "name": "Dormant Yield glossary", "url": SITE + "/glossary",
+                  "hasDefinedTerm": [{"@type": "DefinedTerm", "name": re.sub("<[^>]+>", "", t), "description": re.sub("<[^>]+>", "", re.sub(r'<span class="gl-where">.*?</span>', "", d)).strip(),
+                                      "url": f"{SITE}/glossary#{i}"} for i, t, d in terms]}
+        page(f.stem, m["title"], m["description"], fill(f'<section><div class="{wrapcls}">{body}</div></section>'), jsonld=ld,
              robots=m.get("robots", "index, follow"), canonical=m.get("canonical", "yes") == "yes")
 
 
@@ -494,7 +518,8 @@ def index_and_sitemap():
            {"t": "About us", "u": "/about", "k": "about independent referrer fee contact kaada nordic martech"},
            {"t": "Privacy", "u": "/privacy", "k": "privacy gdpr cookies data protection"},
            {"t": "Legal and disclosures", "u": "/legal", "k": "legal disclosure referral fee affiliation"},
-           {"t": "All industries", "u": "/industries", "k": "industries sectors list"}]
+           {"t": "All industries", "u": "/industries", "k": "industries sectors list"},
+           {"t": "Glossary", "u": "/glossary", "k": "glossary terms definitions officeholder administration liquidation bona vacantia restoration chapter 7 chapter 11 363 abc assignee receiver trustee deregistration de-identification pre-pack"}]
     for c, n, big, slug in COUNTRIES:
         if big:
             idx.append({"t": f"{n}: SME guide", "u": f"/guides/{slug}/sme", "g": "Guide · main focus", "k": f"{n.lower()} sme small medium guide steps"})
@@ -511,7 +536,7 @@ def index_and_sitemap():
         idx.append({"t": i["name"], "u": f'/industries/{i["slug"]}', "g": i["group"] + (" · Key niche" if i["key"] else ""),
                     "k": " ".join([i["group"]] + i["records"]).lower()})
     (PUB / "assets/index.json").write_text(json.dumps(idx, ensure_ascii=False, separators=(",", ":")))
-    urls = (["/", "/how-it-works", "/officeholders", "/industries", "/countries", "/faq", "/about", "/privacy", "/legal", "/tools/readiness", "/blog"]
+    urls = (["/", "/how-it-works", "/officeholders", "/industries", "/countries", "/faq", "/about", "/privacy", "/legal", "/tools/readiness", "/blog", "/glossary"]
             + v4.guide_urls() + [f"/blog/{f.stem}" for f in sorted((ROOT / "content/blog").glob("*.html"))]
             + [f"/countries/{slug}" for _, _, _, slug in BIG4] + [f'/industries/{i["slug"]}' for i in INDS])
     sm = "".join(f'  <url><loc>{SITE}{"" if u == "/" else u}{"/" if u == "/" else ""}</loc><lastmod>{LASTMOD}</lastmod></url>\n' for u in urls)
