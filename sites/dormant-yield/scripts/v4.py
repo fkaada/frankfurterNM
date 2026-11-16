@@ -19,7 +19,7 @@ def flag_pills(link=True):
     out = []
     for c, n, big, slug in B["COUNTRIES"]:
         href = f"/guides/{slug or GUIDE_SLUG[c]}"
-        inner = f'{flag(c)}<span>{e(n)}</span>' + ('<em>Main focus</em>' if big else "")
+        inner = f'{flag(c)}<span>{e(n)}</span>' + ('<span class="sr">, </span><em>Main focus</em>' if big else "")
         out.append(f'<li class="{"main" if big else ""}"><a href="{href}">{inner}</a></li>' if link else f"<li>{inner}</li>")
     return f'<ul class="pills">{"".join(out)}</ul>'
 
@@ -178,7 +178,7 @@ def guides():
         else:
             guide_local(c, n)
     big4 = "".join(
-        f'<li><div class="gc-top">{flag(c, 40)}<strong>{e(n)}</strong><em>Main focus</em></div>'
+        f'<li><div class="gc-top">{flag(c, 40)}<strong>{e(n)}</strong><span class="sr">, </span><em>Main focus</em></div>'
         f'<a href="/guides/{slug}/sme">SME guide <span aria-hidden="true">→</span></a><a href="/guides/{slug}/enterprise">Enterprise guide <span aria-hidden="true">→</span></a>'
         f'<a class="muted" href="/countries/{slug}">Rights guide</a></li>'
         for c, n, big, slug in B["COUNTRIES"] if big)
