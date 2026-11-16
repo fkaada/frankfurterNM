@@ -314,7 +314,7 @@ def home():
         ORG,
         {"@type": "WebSite", "@id": SITE + "/#site", "url": SITE + "/", "name": "Dormant Yield", "inLanguage": "en-GB", "publisher": {"@id": SITE + "/#org"}},
     ]}
-    page("", "Dormant Yield",
+    page("", "Dormant Yield: Company Records as an Asset for Creditors",
          "For officeholders of closed and closing companies in the UK, US, Canada and Australia: how licensing business records works and where to apply.",
          fill((ROOT / "content/home.html").read_text()), ld,
          head_extra='<link rel="preload" as="image" href="/img/vault.webp" imagesrcset="/img/vault-400.webp 400w, /img/vault-560.webp 560w, /img/vault-720.webp 720w, /img/vault.webp 900w" imagesizes="(max-width: 860px) 92vw, 460px" fetchpriority="high">\n')
