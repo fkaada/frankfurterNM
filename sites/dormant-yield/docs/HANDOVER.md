@@ -53,19 +53,8 @@ node tests/check.mjs --launch     # the gate: must say ok
 - Internal links, sitemap URLs and share images all resolve.
 - Production deploys fail if any partner fact is still marked pending.
 
-## Manual tasks, in order (also on Fred's Task Board, Dormant Yield lane)
-| # | Task | Owner | Blocks |
-|---|---|---|---|
-| P1 | ~~GoDaddy DNS on all three domains~~ done 16 Nov; Search Console TXT and sitemap still to confirm | Fred | Indexing |
-| P8 | Say "DNS done"; Claude runs `live-check.mjs`; Fred click-tests the micro1 link once | Claude + Fred | Launch sign-off |
-| P3 | Vercel Firewall rules (Bot Protection Log 7 days, AI bots Log, deny probe paths, rate limit 300 per 5 min, then Challenge) | Vinni, Fred confirms | Outreach |
-| P2 | Connect GitHub to Vercel (repo, root `sites/dormant-yield`, build `node tests/check.mjs`, production branch) | Fred, Vinni helps | Smooth releases |
-| P9 | Skim and approve guides, insights, checklist ("v4 ok") | Fred, after Astrid's QA | Outreach |
-| P7 | Lawyer read: privacy, legal, guides and every statute citation | Fred | Outreach |
-| P4 | Outreach mailbox and mail DNS on dormantyields.com, then the 6-week warm-up | Fred | Outreach |
-| P5 | "No mail" SPF and DMARC records on dormantyield.com and .co.uk | Fred | Brand safety |
-| P6 | Postal address for the outreach signature (US CAN-SPAM) | Fred | US outreach |
-| P10 | Optional: connect an image worker in BrainMate | Fred | Nice to have |
+## Manual tasks
+**The source of truth is Fred's Task Board (lane "Dormant Yield"), not this file.** A copy here goes stale within hours. At 16 November 2026 the lane had finished the launch work (DNS, GitHub, firewall, mailbox, no-mail records, postal address, lawyer read, content approval) and was open on: warm-up start (P11), Postmaster Tools re-test (P12), UK GDPR Article 27 decision (P13), bot-log review on 23 November (P14), the lawyer's contact details for the P7 cover email, the SuperPlug bundle (P16), and a look at CodeFactor's two findings on PR #8.
 
 ## Home page order (v7)
 Hero, then a numbered path: 1 who this is for, 2 what is licensed, 3 how it works, 4 fit check, 5 checks before you talk to a buyer, then countries, sectors, who gains, 6 apply, our role, further reading, FAQ.

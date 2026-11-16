@@ -1,6 +1,6 @@
 # Dormant Yield: system design
 
-Status 15 November 2026. Release 7901e19 (v6) is served on Vercel; the custom domains are waiting for GoDaddy DNS.
+Status 16 November 2026. v7 (merge bc8d946) is live on dormantyield.com. GitHub is connected to Vercel: merging a pull request into `main` is the only route to production.
 
 ## 1. Requirements
 
