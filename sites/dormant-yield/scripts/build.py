@@ -154,7 +154,7 @@ def header():
     return f'''<a class="skip" href="#top">Skip to content</a>
 <div class="masthead">
 <aside class="disclose" aria-label="Referral disclosure">
-  <div class="wrap"><span class="badge">Independent referrer</span><span class="d-long">Not affiliated with micro1. If a qualifying deal completes through our link, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">Independent referrer: we may earn a fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
+  <div class="wrap"><span class="badge">Independent referrer</span><span class="sr">. </span><span class="d-long">Not affiliated with micro1. If a qualifying deal completes through our link, micro1 may pay us a referral fee. You pay nothing.</span><span class="d-short">Independent referrer: we may earn a fee from micro1. You pay nothing.</span><a href="/about">How we are paid</a></div>
 </aside>
 <header class="top">
   <div class="wrap">
@@ -281,7 +281,7 @@ FAQ = [
 def fill(body):
     """Shared placeholders for content pages."""
     big = "".join(
-        f'<li class="main"><a href="/countries/{slug}"><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span><em>Main focus</em></a></li>'
+        f'<li class="main"><a href="/countries/{slug}"><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span><span class="sr">, </span><em>Main focus</em></a></li>'
         for c, n, _, slug in BIG4)
     rest = "".join(f'<li><img src="/img/flags/{c}.svg" width="30" height="20" alt=""><span>{e(n)}</span></li>' for c, n, b, _ in COUNTRIES if not b)
     rights4 = "".join(
