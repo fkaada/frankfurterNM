@@ -17,7 +17,7 @@ SITE = "https://dormantyield.com"
 # Locked by Fred in writing, 15 November 2026 (replaces the /register/ link). Byte-exact. Never edit.
 MICRO1 = "https://company.micro1.ai/get-started?referralCode=b6089a23-af54-4292-8bb3-070423a40fc0"
 REVIEWED = "15 November 2026"
-LASTMOD = "2026-11-15"
+LASTMOD = "2026-11-16"
 
 COUNTRIES = [  # micro1 defunct-company track, company.micro1.ai/get-started, checked 15 November 2026
     # (code, name, big four, page slug)
@@ -45,17 +45,17 @@ RIGHTS = {
                  "In an assignment for the benefit of creditors, the assignee holds the assets under state law."],
         dissolved=["Outside bankruptcy, state law on dissolved corporations decides who can still act for the company and for how long.",
                    "If the company went through bankruptcy, check whether the records were sold with the business assets."],
-        privacy=["If the company's privacy policy restricted transfers of personal information, the court may appoint a consumer privacy ombudsman before a sale (11 U.S.C. §§332, 363(b)(1)).",
+        privacy=["If the company's privacy policy barred transfers of personal information, that information can only be sold in line with the policy, or with court approval after a consumer privacy ombudsman has been appointed (11 U.S.C. §§332, 363(b)(1)).",
                  "State privacy laws and contracts with customers can still apply to personal data in the records."],
         register="Court dockets (PACER) show trustee appointments and sale orders; state registries show dissolution."),
     "ca": dict(
         roles="Licensed insolvency trustees, receivers and court-appointed monitors",
         control=["In bankruptcy, the licensed insolvency trustee holds and realises the company's property (Bankruptcy and Insolvency Act).",
-                 "In receiverships and CCAA restructurings, asset sales usually need court approval (Companies' Creditors Arrangement Act, s.36)."],
+                 "In a CCAA restructuring, sales outside the ordinary course need court approval (Companies' Creditors Arrangement Act, s.36). A court-appointed receiver usually needs the court to approve a sale too (Bankruptcy and Insolvency Act, s.243)."],
         dissolved=["When a federal corporation is dissolved, property it had not disposed of generally vests in the Crown (Canada Business Corporations Act, s.228). Provincial laws are similar.",
                    "Revival of the corporation may be possible before anything can be licensed."],
         privacy=["PIPEDA, and provincial laws in Quebec, British Columbia and Alberta, continue to apply to personal information in the records.",
-                 "PIPEDA allows limited sharing for business transactions only under conditions (s.7.2), so take advice before any sample leaves your hands."],
+                 "PIPEDA allows sharing in a business transaction without consent only under a written agreement, and not where the main purpose of the deal is the personal information itself (s.7.2). Remove or de-identify it and take advice before any sample leaves your hands."],
         register="The Office of the Superintendent of Bankruptcy lists insolvency records; Corporations Canada and provincial registries show status."),
     "au": dict(
         roles="Liquidators, voluntary administrators and receivers (registered liquidators)",
