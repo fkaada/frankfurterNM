@@ -637,3 +637,4 @@ aside.disclose{display:block}
 a.gl{text-decoration:underline dotted;text-underline-offset:3px;color:inherit}
 a.gl:hover{color:var(--sprout-ink)}
 .photo-fig{max-width:780px;margin:8px 0 4px;display:flex;flex-direction:column;gap:6px}.photo-fig img{width:100%;height:auto;display:block}.photo-fig figcaption{margin:0}
+.related{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}.related li{border-bottom:1px solid var(--line)}.related a{display:block;padding:13px 2px;color:var(--ink);text-decoration:none;font-weight:600}.related a:hover{color:var(--sprout-ink)}

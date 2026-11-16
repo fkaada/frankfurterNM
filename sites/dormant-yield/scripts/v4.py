@@ -242,6 +242,22 @@ def readiness():
               "Twenty checks for officeholders before licensing a closed company's records: authority, records, personal data, contracts and decision.", body, ld)
 
 
+
+def related(p, posts):
+    """Related reading: the country's guides, then other articles (same country first). Gives every article more than one inbound link."""
+    c = p.get("country", ""); items = []
+    big = {code: (name, slug) for code, name, b, slug in B["COUNTRIES"] if b}
+    if c in big:
+        n, slug = big[c]
+        items += [(f"/countries/{slug}", f"{n}: who holds the rights"), (f"/guides/{slug}/sme", f"{n}: SME guide"),
+                  (f"/guides/{slug}/enterprise", f"{n}: enterprise guide")]
+    others = sorted((q for q in posts if q["slug"] != p["slug"]), key=lambda q: (q.get("country") != c, q["slug"]))[:3]
+    items += [(f'/blog/{q["slug"]}', q["h1"]) for q in others]
+    items += [("/glossary", "Glossary: insolvency and data terms in plain English")]
+    lis = "".join(f'<li><a href="{u}">{e(t)}</a></li>' for u, t in items)
+    return f'<section class="pt0"><div class="wrap narrow-col"><h2 class="h3">Related reading</h2><ul class="related">{lis}</ul></div></section>'
+
+
 # ---------- blog ----------
 def blog():
     posts = []
@@ -261,6 +277,7 @@ def blog():
 <p class="byline">Dormant Yield editorial · {e(p["display_date"])} · General information, not legal advice</p>
 </div></section>
 <section class="pt0"><div class="wrap narrow-col prose">{B["fill"](p["body"])}</div></section></article>
+{related(p, posts)}
 <section class="pt0"><div class="wrap">{cta_band()}</div></section>
 {next_cards("ready", "guides", "fit", title="Keep going")}'''
         ld = {"@context": "https://schema.org", "@graph": [B["ORG"],
