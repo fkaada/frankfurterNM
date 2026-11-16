@@ -1,6 +1,11 @@
 # Hosting, domains and launch
 
-## Status, 15 November 2026 (release 68c1692, v6 + sized images and hero preload; Lighthouse 96-99 / 100 / 100 / 100; axe 0 violations): published on Vercel, custom domains wait for GoDaddy DNS
+## Status, 16 November 2026 (release f3ae94d, v7): LIVE on dormantyield.com
+DNS switched by Fred on 16 Nov. All six domains verified in Vercel. dormantyield.co.uk, www and dormantyields.com redirect (308) to dormantyield.com.
+
+**Known trap (found 16 Nov):** API deployments with `target: production` updated the vercel.app alias but left the custom domains on an older deployment (dpl_BZu5…), so dormantyield.com served v6 while the preview showed v7. Until GitHub is connected, after every deploy:
+1. Assign `dormantyield.com`, `dormantyield.co.uk` and `dormant-yield.vercel.app` to the new deployment (Vercel → Deployments → the new one → Promote, or ask Claude).
+2. Run `node scripts/live-check.mjs`: its Release check fails if the live site differs from this checkout.
 
 - **Vercel project:** `dormant-yield` in team Nordic MarTech (`prj_1tqOBfFP28DV7CE2L967uOaqeFGL`). Production: https://dormant-yield-nordic-mar-tech.vercel.app (served, launch gate passed: 93 pages, 81 partner links, locked link intact; stress test 276 page loads at 360/768/1280 px, 0 failures).
 - **Domains added to the project:** dormantyield.com, www.dormantyield.com, dormantyield.co.uk, www.dormantyield.co.uk, dormantyields.com, www.dormantyields.com. All six still point at GoDaddy parking (3.33.130.190, 15.197.148.33).

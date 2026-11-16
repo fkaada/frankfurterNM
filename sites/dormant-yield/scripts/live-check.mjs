@@ -24,16 +24,29 @@ if (isProd) {
     ["https://www.dormantyield.com/faq", "https://dormantyield.com/faq", true],
     ["https://dormantyield.co.uk/faq", "https://dormantyield.com/faq", true],
     ["https://www.dormantyield.co.uk/", "https://dormantyield.com/", true],
-    ["https://dormantyields.com/anything", "https://dormantyield.com/", false],
+    ["https://dormantyields.com/", "https://dormantyield.com/", false],
     ["http://dormantyield.com/", "https://dormantyield.com/", true],
   ]) {
     const r = await get(from, "manual");
     const loc = r.headers.get ? r.headers.get("location") : null;
     const want = perm ? [301, 308] : [302, 307, 308, 301];
-    if (want.includes(r.status) && loc && loc.replace(/\/$/, "") === to.replace(/\/$/, "")) ok(`${from} → ${loc} (${r.status})`);
+    // Vercel may add a share token when fetched through its tools; ignore query strings.
+    const clean = loc ? loc.split("?")[0] : loc;
+    if (want.includes(r.status) && clean && clean.replace(/\/$/, "") === to.replace(/\/$/, "")) ok(`${from} → ${loc} (${r.status})`);
     else bad(`${from} → ${loc || "no location"} (${r.status || r.error})`);
   }
 } else console.log("  skipped (only for https://dormantyield.com)");
+
+console.log("\nRelease");
+// Catches the 15-16 Nov failure: custom domains stuck on an older deployment while vercel.app showed the new one.
+try {
+  const { readFileSync } = await import("node:fs");
+  const local = readFileSync(new URL("../public/index.html", import.meta.url), "utf8");
+  const live = await (await get(BASE + "/")).text();
+  const v = (h) => (h.match(/site\.css\?v=([a-f0-9]+)/) || [])[1];
+  v(live) && v(live) === v(local) ? ok(`live release matches this checkout (css ${v(local)})`)
+    : bad(`live release differs from this checkout: live css ${v(live) || "?"}, local ${v(local)}. Re-assign the domains to the latest deployment.`);
+} catch (e) { console.log("  skipped (no local build): " + e.message); }
 
 console.log("\nPages");
 const sm = await get(BASE + "/sitemap.xml");

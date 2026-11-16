@@ -3,7 +3,7 @@
 15 November 2026. One page for Fred and the team: what exists, how to change it, and what is left to do by hand.
 
 ## What exists
-- **Live site:** https://dormant-yield-nordic-mar-tech.vercel.app. Vercel project `dormant-yield`, team Nordic MarTech. It moves to https://dormantyield.com once DNS is switched.
+- **Live site:** https://dormantyield.com (live since 16 November 2026). Vercel project `dormant-yield`, team Nordic MarTech.
 - **Pages (94):**
   - home
   - how it works
@@ -41,7 +41,7 @@ node scripts/og.js                # share cards (only when titles change; needs 
 node tests/check.mjs --launch     # the gate: must say ok
 ```
 
-**Deploy:** commit and push. Until GitHub is connected to Vercel, set `SHA=` in `scripts/deploy.sh` to the new commit and redeploy (ask Claude). After any deploy, run `node scripts/live-check.mjs`.
+**Deploy:** commit and push. Until GitHub is connected to Vercel, set `SHA=` in `scripts/deploy.sh` to the new commit, redeploy, then assign the custom domains to the new deployment (see docs/DEPLOY.md, "Known trap"). After any deploy, run `node scripts/live-check.mjs`; its Release check catches a stale domain.
 
 ## Rules the gate enforces (the build fails if broken)
 - The micro1 link is byte-exact everywhere, and every page with it carries the "Referral link" disclosure.
@@ -56,7 +56,7 @@ node tests/check.mjs --launch     # the gate: must say ok
 ## Manual tasks, in order (also on Fred's Task Board, Dormant Yield lane)
 | # | Task | Owner | Blocks |
 |---|---|---|---|
-| P1 | GoDaddy DNS on all three domains, plus the Search Console TXT record and sitemap | Fred | Launch |
+| P1 | ~~GoDaddy DNS on all three domains~~ done 16 Nov; Search Console TXT and sitemap still to confirm | Fred | Indexing |
 | P8 | Say "DNS done"; Claude runs `live-check.mjs`; Fred click-tests the micro1 link once | Claude + Fred | Launch sign-off |
 | P3 | Vercel Firewall rules (Bot Protection Log 7 days, AI bots Log, deny probe paths, rate limit 300 per 5 min, then Challenge) | Vinni, Fred confirms | Outreach |
 | P2 | Connect GitHub to Vercel (repo, root `sites/dormant-yield`, build `node tests/check.mjs`, production branch) | Fred, Vinni helps | Smooth releases |
