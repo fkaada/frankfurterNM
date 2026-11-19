@@ -191,15 +191,15 @@ FOOTER_T = '''<footer>
     <a class="brand" href="/"><span>Dormant <b>Yield</b></span></a>
     <address class="owner">Kaada Nordic MarTech · Org. no. 936 289 835 (Norway) · <a href="mailto:contact@nordicmartech.com">contact@nordicmartech.com</a></address>
     <p>An independent referrer, not affiliated with, endorsed by or acting for micro1. If a company applies through our link and a qualifying deal completes, micro1 may pay us a referral fee. Companies pay us nothing.</p>
-    <p>General information, not legal, tax or insolvency advice. Partner criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed REVIEWED_DATE.</p>
+    <p>General information, not legal, tax or insolvency advice. Eligibility criteria are micro1's and can change; check micro1's current terms before relying on anything here. Page reviewed REVIEWED_DATE.</p>
     <nav class="row foot-nav" aria-label="Footer"><a href="/guides">Country guides</a><a href="/blog">Insights</a><a href="/tools/readiness">Readiness checklist</a><a href="/how-it-works">How it works</a><a href="/glossary">Glossary</a><a href="/officeholders">For officeholders</a><a href="/industries">Industries</a><a href="/countries">Countries</a><a href="/faq">FAQ</a><a href="/about">About</a><a href="/privacy">Privacy</a><a href="/legal">Legal and disclosures</a></nav>
   </div>
 </footer>
 <script src="{JS}" data-index="{IDX}" defer></script>'''
 
 
-def footer():
-    return (FOOTER_T.replace("REVIEWED_DATE", REVIEWED)
+def footer(reviewed=REVIEWED):
+    return (FOOTER_T.replace("REVIEWED_DATE", reviewed)
             .replace("{JS}", asset("/assets/site.js")).replace("{IDX}", asset("/assets/index.json")))
 
 
@@ -218,7 +218,7 @@ def gloss_link(body):
     return body
 
 
-def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None, head_extra=""):
+def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical=True, og_image="/img/og.jpg", visual=None, head_extra="", reviewed=REVIEWED):
     if path not in ("glossary", "404", "privacy", "legal"):
         body = gloss_link(body)
     if visual:
@@ -258,7 +258,7 @@ def page(path, title, desc, body, jsonld=None, robots="index, follow", canonical
 <main id="top">
 {body.strip()}
 </main>
-{footer()}
+{footer(reviewed)}
 </body>
 </html>
 '''
@@ -501,7 +501,8 @@ def text_pages():
                   "hasDefinedTerm": [{"@type": "DefinedTerm", "name": re.sub("<[^>]+>", "", t), "description": re.sub("<[^>]+>", "", re.sub(r'<span class="gl-where">.*?</span>', "", d)).strip(),
                                       "url": f"{SITE}/glossary#{i}"} for i, t, d in terms]}
         page(f.stem, m["title"], m["description"], fill(f'<section><div class="{wrapcls}">{body}</div></section>'), jsonld=ld,
-             robots=m.get("robots", "index, follow"), canonical=m.get("canonical", "yes") == "yes")
+             robots=m.get("robots", "index, follow"), canonical=m.get("canonical", "yes") == "yes",
+             reviewed=m.get("reviewed", REVIEWED))
 
 
 def index_and_sitemap():
