@@ -417,7 +417,7 @@ header.top .wrap{transition:padding .2s}
 .pills li.main a{border-color:var(--sprout);background:linear-gradient(180deg,var(--paper),var(--paper-2))}
 .pills em{grid-column:2;font:700 .62rem/1.3 var(--body);font-style:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--sprout-ink);margin-top:3px}
 .pills a:hover{border-color:var(--forest)}
-@media (max-width:420px){.pills{gap:8px}.pills a{padding:9px 9px;column-gap:8px;font-size:.86rem}.pills .fl{width:26px;height:26px}.band-card{padding:18px 14px}}
+@media (max-width:420px){.pills{gap:8px}.pills a{padding:9px;column-gap:8px;font-size:.86rem}.pills .fl{width:26px;height:26px}.band-card{padding:18px 14px}}
 @media (min-width:900px){.pills{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .band.deep{background:var(--forest-deep)}
 .band-card{background:var(--paper);color:var(--ink);border-radius:22px;padding:clamp(18px,3vw,28px);display:grid;gap:16px;box-shadow:0 30px 60px -40px rgba(0,0,0,.5)}
