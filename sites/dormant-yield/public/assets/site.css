@@ -3,13 +3,19 @@
 @font-face{font-family:"DM Sans";font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/dm-sans-latin-700-normal.woff2) format("woff2")}
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:700;font-display:swap;src:url(/fonts/plus-jakarta-sans-latin-700-normal.woff2) format("woff2")}
 @font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url(/fonts/plus-jakarta-sans-latin-800-normal.woff2) format("woff2")}
+/* Metric-matched fallbacks: the text keeps its size and line height while the web fonts load, so the page does not jump when they swap in (CLS). */
+@font-face{font-family:"DM Sans Fallback";font-style:normal;font-weight:400;src:local("Arial"),local("ArialMT"),local("Helvetica"),local("Liberation Sans");size-adjust:101.9%;ascent-override:97.35%;descent-override:30.42%;line-gap-override:0%}
+@font-face{font-family:"DM Sans Fallback";font-style:normal;font-weight:500;src:local("Arial"),local("ArialMT"),local("Helvetica"),local("Liberation Sans");size-adjust:103.5%;ascent-override:95.85%;descent-override:29.95%;line-gap-override:0%}
+@font-face{font-family:"DM Sans Fallback";font-style:normal;font-weight:700;src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");size-adjust:96%;ascent-override:103.33%;descent-override:32.29%;line-gap-override:0%}
+@font-face{font-family:"Plus Jakarta Sans Fallback";font-style:normal;font-weight:700;src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");size-adjust:101.12%;ascent-override:102.65%;descent-override:21.95%;line-gap-override:0%}
+@font-face{font-family:"Plus Jakarta Sans Fallback";font-style:normal;font-weight:800;src:local("Arial Bold"),local("Arial-BoldMT"),local("Helvetica Bold"),local("Liberation Sans Bold");size-adjust:102.16%;ascent-override:101.61%;descent-override:21.73%;line-gap-override:0%}
 /* Layout: one calm column on cream, deep-green bands for the two moments that matter (rights check, fit check). */
 :root{
   --paper:#F3F0E6; --paper-2:#E9E5D7; --ink:#0B2A22; --ink-soft:#3D5750;
   --forest:#0E4A3A; --forest-deep:#0A3529; --sprout:#1FA971; --sprout-ink:#0A6B45; --sprout-on-dark:#4BE0A0;
   --line:#D5D0BF; --on-forest:#EEF4EF; --on-forest-soft:#B9CEC4; --warn:#9A5B12; --warn-bg:#F6E7CF;
-  --display:"Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
-  --body:"DM Sans", "Segoe UI", system-ui, sans-serif;
+  --display:"Plus Jakarta Sans", "Plus Jakarta Sans Fallback", "Segoe UI", system-ui, sans-serif;
+  --body:"DM Sans", "DM Sans Fallback", "Segoe UI", system-ui, sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
