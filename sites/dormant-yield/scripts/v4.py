@@ -245,7 +245,8 @@ def readiness():
 
 def related(p, posts):
     """Related reading: the country's guides, then other articles (same country first). Gives every article more than one inbound link."""
-    c = p.get("country", ""); items = []
+    c = p.get("country", "")
+    items = []
     big = {code: (name, slug) for code, name, b, slug in B["COUNTRIES"] if b}
     if c in big:
         n, slug = big[c]
